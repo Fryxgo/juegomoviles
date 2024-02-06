@@ -1,5 +1,6 @@
 package Juego.moviles.Jueuito;
 
+import static Juego.moviles.Jueuito.Constantes.PPM;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,14 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
@@ -31,7 +29,6 @@ public class MyGdxGame extends Game {
 
     Serpiente player, cuerpo;
 
-    public float ppm = 32;
 
     boolean movimiento = true;
 
@@ -65,7 +62,7 @@ public class MyGdxGame extends Game {
         player = new Serpiente(32, 32, 0, 0, world, false);
         cuerpos.add(player);
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 3; i++) {
 
             cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
         }
@@ -80,8 +77,7 @@ public class MyGdxGame extends Game {
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
-        b2dr.render(world, camera.combined.scl(ppm));
+        b2dr.render(world, camera.combined.scl(PPM));
     }
 
     @Override
@@ -103,7 +99,7 @@ Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
 
         if (!hit) {
 
-            setMovimiento(1000);
+            setMovimiento(200);
         }
 
 
@@ -116,14 +112,10 @@ Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
             @Override
             public void beginContact(Contact contact) {
 
-                Gdx.app.log("hit", contact.getFixtureA().getUserData() + " " + contact.getFixtureB().getUserData());
-
                 if (contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("fruta")) {
-
-
-                    Gdx.app.log("hit", "hit");
                     crear = true;
                     colision = false;
+
 
                 }
 
@@ -156,6 +148,7 @@ Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
         });
     }
 
+
     public void setMovimiento(float tick) {
 
         if (!hit) {
@@ -183,71 +176,30 @@ Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
 
             if (System.currentTimeMillis() - tini > tick) {
 
-                switch (direccionFinal) {
-                    case RIGHT:
-                        x = 1.1f;
-                        y = 0;
-                        break;
-                    case LEFT:
-                        x = -1.1f;
-                        y = 0;
-                        break;
-                    case UP:
-                        x = 0;
-                        y = -1.1f;
-                        break;
-                    case DOWN:
-                        x = 0;
-                        y = 1.1f;
-                        break;
-
-                }
 
                 movimiento = true;
-
 
                 hitContact();
 
                 if (crear) {
 
-                    Gdx.app.log("x", fruta.getPosicionX()+"");
-                    Gdx.app.log("y", fruta.getPosicionY()+"");
+                    Random rd = new Random();
+                    //cambio la ubicacion de la fruta de manera random
+                    float x = (float) (Math.random()*(525-(-525)+1)-525);
+                    float y = (float) (Math.random()*(225-(-225)+1)-225);
 
-                    float x = (float) (Gdx.graphics.getWidth() / 2 - Math.random() * Gdx.graphics.getWidth() / 2);
-                    float y = (float) (Gdx.graphics.getHeight() / 2 - Math.random() * Gdx.graphics.getHeight() / 2);
+                    fruta.mover(x,y);
 
+                    Gdx.app.log("Fruta", fruta.body.getPosition()+"");
 
-                    switch (direccionFinal) {
-                        case DOWN:
-                            creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX();
-                            creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY() - 33;
-                            break;
-                        case UP:
-                            creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX();
-                            creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY() + 33;
-                            break;
-                        case RIGHT:
-                            creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX() - 33;
-                            creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY();
-                            break;
-                        case LEFT:
-                            creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX() + 33;
-                            creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY();
-                            break;
-                    }
-
-                    fruta.destruir(200, 0);
-                    cuerpos.add(new Serpiente(32, 32, creaX, creaY, world, true));
-
+                    creaCuerpo();
 
                     crear = false;
 
-                    Gdx.app.log("x", fruta.getPosicionX()+"");
-                    Gdx.app.log("y", fruta.getPosicionY()+"");
                 }
 
 
-                cuerpos.get(0).mover(player.getPosicionX() + x, player.getPosicionY() + y);
+                cuerpos.get(0).mover(player.getPosicionX() + direccionFinal.vector2.x, player.getPosicionY() + direccionFinal.vector2.y);
 
                 for (int i = 1; i < cuerpos.size(); i++) {
 
@@ -260,6 +212,34 @@ Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
 
         }
 
+    }
+
+    /**
+     * genera un nuevo cubo y lo agrega al cuerpo de la serpiente
+     */
+    public void creaCuerpo(){
+
+        switch (direccionFinal) {
+            case DOWN:
+                creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX();
+                creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY() - 33;
+                break;
+            case UP:
+                creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX();
+                creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY() + 33;
+                break;
+            case RIGHT:
+                creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX() - 33;
+                creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY();
+                break;
+            case LEFT:
+                creaX = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorX() + 33;
+                creaY = cuerpos.get(cuerpos.size() - 1).getPosicionAnteriorY();
+                break;
+        }
+
+
+        cuerpos.add(new Serpiente(32, 32, creaX, creaY, world, true));
     }
 
 

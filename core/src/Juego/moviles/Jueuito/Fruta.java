@@ -62,12 +62,12 @@ public class Fruta {
 
     }
 
-    public void destruir(float x, float y) {
+    public void mover(float x, float y) {
 
 
         setPosicionX(x);
         setPosicionY(y);
-       this.body.setTransform(49, 19, this.body.getAngle());
+       this.body.setTransform(x/PPM, y/PPM, this.body.getAngle());
 
 
     }

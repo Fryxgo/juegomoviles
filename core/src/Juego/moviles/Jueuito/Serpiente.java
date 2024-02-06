@@ -76,9 +76,9 @@ public class Serpiente {
         def.fixedRotation = true;
         if (isCabeza) {
 
-            def.type = BodyDef.BodyType.StaticBody;
-        } else {
             def.type = BodyDef.BodyType.DynamicBody;
+        } else {
+            def.type = BodyDef.BodyType.KinematicBody;
         }
 
         body = world.createBody(def);
