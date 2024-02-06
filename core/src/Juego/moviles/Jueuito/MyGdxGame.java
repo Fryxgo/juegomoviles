@@ -160,9 +160,11 @@ Gdx.app.log("fruta",fruta.body.getPosition().x+":"+fruta.body.getPosition().y);
 
         if (!hit) {
 
-            Gdx.input.setInputProcessor(new GestureDetector(new
-            if ((direccion = MyGestureListener.direccion())MyGestureListener()));
-            if (movimiento) { != DIR.NO_DIRECTION) {
+            Gdx.input.setInputProcessor(new GestureDetector(new MyGestureListener()));
+            direccion = MyGestureListener.direccion();
+
+            if (movimiento) {
+               if (direccion != DIR.NO_DIRECTION) {
                     if (!(direccionAnterior == DIR.DOWN && direccion == DIR.UP)) {
                         if (!(direccionAnterior == DIR.UP && direccion == DIR.DOWN)) {
                             if (!(direccionAnterior == DIR.LEFT && direccion == DIR.RIGHT)) {
