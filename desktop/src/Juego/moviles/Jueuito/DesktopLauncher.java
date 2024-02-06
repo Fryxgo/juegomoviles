@@ -1,4 +1,4 @@
-package aaaaaaa.aaa.aaa;
+package Juego.moviles.Jueuito;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;

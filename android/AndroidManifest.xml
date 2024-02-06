@@ -7,14 +7,14 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/descarga"
         android:isGame="true"
         android:appCategory="game"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name="aaaaaaa.aaa.aaa.AndroidLauncher"
+            android:name="Juego.moviles.Jueuito.AndroidLauncher"
             android:label="@string/app_name" 
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout"

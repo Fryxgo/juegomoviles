@@ -1,10 +1,10 @@
-package aaaaaaa.aaa.aaa;
+package Juego.moviles.Jueuito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.ArrayList;
+import Juego.moviles.Jueuito.Constantes.DIR;
 
 public class MyGestureListener implements GestureDetector.GestureListener {
 
@@ -26,6 +26,8 @@ public class MyGestureListener implements GestureDetector.GestureListener {
     public boolean tap(float x, float y, int count, int button) {
         return false;
     }
+
+
 
     @Override
     public boolean longPress(float x, float y) {
@@ -69,11 +71,15 @@ public class MyGestureListener implements GestureDetector.GestureListener {
     public void pinchStop() {
     }
 
-    public static String direccion() {
+    /**
+     * hola javi :) no me suspendas :))))))
+     *
+     * @return
+     */
+    public static Constantes.DIR direccion() {
 
 
         if (touch) {
-
 
 
             touch = false;
@@ -83,17 +89,17 @@ public class MyGestureListener implements GestureDetector.GestureListener {
 
             if (direcionFinal(x, y)) {
                 if (x > 0) {
-                    return "d";
+                    return DIR.RIGHT;
                 }
-                return "-d";
+                return DIR.LEFT;
             }
 
             if (y > 0) {
-                return "y";
+                return DIR.UP;
             }
-            return "-y";
+            return DIR.DOWN;
         }
-        return "";
+        return DIR.NO_DIRECTION;
     }
 
     public static float comparar(float principio, float fin) {
