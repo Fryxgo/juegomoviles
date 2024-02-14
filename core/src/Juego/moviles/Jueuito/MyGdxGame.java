@@ -6,6 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -23,7 +26,7 @@ import Juego.moviles.Jueuito.Constantes.DIR;
 public class MyGdxGame extends Game {
 
     private OrthographicCamera camera;
-
+    private OrthogonalTiledMapRenderer tmr;
     private Box2DDebugRenderer b2dr;
     private World world;
 
@@ -45,6 +48,8 @@ public class MyGdxGame extends Game {
 
     boolean crear = false, colision = true;
 
+    Mapa mapa;
+
 
     @Override
     public void create() {
@@ -52,23 +57,27 @@ public class MyGdxGame extends Game {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        camera = new OrthographicCamera();
+    camera = new OrthographicCamera();
         camera.setToOrtho(false, w / 2, h / 2);
 
-        world = new World(new Vector2(0, 0f), false);
+    world = new World(new Vector2(0, 0f), false);
 
-        b2dr = new Box2DDebugRenderer();
+    b2dr = new Box2DDebugRenderer();
 
-        player = new Serpiente(32, 32, 0, 0, world, false);
-        cuerpos.add(player);
+    player = new Serpiente(32, 32, 0, 0, world, false);
+    cuerpos.add(player);
 
         for (int i = 1; i < 3; i++) {
 
-            cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
-        }
-
-        fruta = new Fruta(-200, 0, world);
+        cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
     }
+
+    fruta = new Fruta(-200, 0, world);
+
+        TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
+        tmr = new OrthogonalTiledMapRenderer(tiledMap,3);
+        mapa = new Mapa(world, tiledMap.getLayers().get("Colisiones").getObjects());
+}
 
     @Override
     public void render() {
@@ -183,14 +192,7 @@ public class MyGdxGame extends Game {
 
                 if (crear) {
 
-                    Random rd = new Random();
-                    //cambio la ubicacion de la fruta de manera random
-                    float x = (float) (Math.random()*(525-(-525)+1)-525);
-                    float y = (float) (Math.random()*(225-(-225)+1)-225);
-
-                    fruta.mover(x,y);
-
-                    Gdx.app.log("Fruta", fruta.body.getPosition()+"");
+                    fruta.mover(posicionFruta());
 
                     creaCuerpo();
 
@@ -212,6 +214,53 @@ public class MyGdxGame extends Game {
 
         }
 
+    }
+
+    /**
+     * Genera una posicion random para la fruta,la cual no puede coincidir con la serpiente y tiene que ser multiplo de 32
+     * @return Vector con la posicion
+     */
+    public Vector2 posicionFruta(){
+
+        float x;
+        float y;
+
+        do {
+            x = (float) (Math.random()*(525-(-525)+1)-525);
+
+        }while (x%32 == 0  && comprueba(x, false));
+
+        do {
+            y = (float) (Math.random()*(225-(-225)+1)-225);
+
+        }while (y%32 == 0  && comprueba(y, true));
+
+        return new Vector2(x,y);
+    }
+
+    /**
+     *Para comprobar que la posicion pasada no coincide con la posicion de ninguna parte de la serpiente
+     * @param posicion
+     * @return
+     */
+    public boolean comprueba( float posicion, boolean posiY){
+
+        boolean pos = true;
+
+        for (int i = 0; i < cuerpos.size(); i++) {
+
+            if (posiY){
+                pos = cuerpos.get(i).getPosicionY() != posicion;
+            }else {
+                pos = cuerpos.get(i).getPosicionX() != posicion;
+            }
+
+            if (!pos){
+                return pos;
+
+            }
+        }
+        return pos;
     }
 
     /**

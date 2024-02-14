@@ -2,6 +2,7 @@ package Juego.moviles.Jueuito;
 
 import static Juego.moviles.Jueuito.Constantes.PPM;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -62,12 +63,12 @@ public class Fruta {
 
     }
 
-    public void mover(float x, float y) {
+    public void mover(Vector2 vector2) {
 
 
-        setPosicionX(x);
-        setPosicionY(y);
-       this.body.setTransform(x/PPM, y/PPM, this.body.getAngle());
+        setPosicionX(vector2.x);
+        setPosicionY(vector2.y);
+       this.body.setTransform(vector2.x/PPM, vector2.y/PPM, this.body.getAngle());
 
 
     }
