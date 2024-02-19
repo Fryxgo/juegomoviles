@@ -23,7 +23,7 @@ public class Mapa {
         Body body;
         BodyDef def =  new BodyDef();
         Fixture fixture;
-        def.type = BodyDef.BodyType.StaticBody;
+        def.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(def);
 
 
@@ -35,6 +35,7 @@ public class Mapa {
         }
 
         fixture = body.createFixture(shape, 1f);
+        fixture.setUserData("Pared");
         shape.dispose();
         }
 
@@ -47,7 +48,7 @@ public class Mapa {
         Vector2[] woldVertices = new Vector2[vertices.length/2];
 
         for (int i = 0; i < woldVertices.length; i++) {
-            woldVertices[i] = new Vector2(vertices[i*2]/10f, vertices[i*2+1]/10f);
+            woldVertices[i] = new Vector2(vertices[i*2]/32f, vertices[i*2+1]/32f);
         }
 
         ChainShape chainShape = new ChainShape();
