@@ -64,7 +64,11 @@ public class MyGdxGame extends Game {
 
     b2dr = new Box2DDebugRenderer();
 
-    player = new Serpiente(32, 32, 0, 0, world, false);
+        TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
+        tmr = new OrthogonalTiledMapRenderer(tiledMap);
+        mapa = new Mapa(world, tiledMap.getLayers().get("Colisiones").getObjects());
+
+    player = new Serpiente(32, 32, 525/32, 225/32, world, false);
     cuerpos.add(player);
 
         for (int i = 1; i < 3; i++) {
@@ -72,21 +76,22 @@ public class MyGdxGame extends Game {
         cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
     }
 
-    fruta = new Fruta(-200, 0, world);
+    fruta = new Fruta( 250, 225, world);
 
-        TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
-        tmr = new OrthogonalTiledMapRenderer(tiledMap,3);
-        mapa = new Mapa(world, tiledMap.getLayers().get("Colisiones").getObjects());
 }
 
     @Override
     public void render() {
+
 
         update(Gdx.graphics.getDeltaTime());
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         b2dr.render(world, camera.combined.scl(PPM));
+
+
+
     }
 
     @Override
@@ -106,6 +111,9 @@ public class MyGdxGame extends Game {
         world.step(1 / 60f, 6, 2);
         cameraUpdate(delta);
 
+        tmr.setView(camera);
+        tmr.render();
+
         if (!hit) {
 
             setMovimiento(200);
@@ -121,22 +129,25 @@ public class MyGdxGame extends Game {
             @Override
             public void beginContact(Contact contact) {
 
+
+
+
                 if (contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("fruta")) {
                     crear = true;
                     colision = false;
+                    Gdx.input.vibrate(100);
 
 
                 }
 
                 if (colision) {
-                    if (contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("cuerpo")) {
+                    if ((contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("cuerpo")) ||(contact.getFixtureA().getUserData().equals("Pared") && contact.getFixtureB().getUserData().equals("cabeza"))) {
 
                         hit = true;
+                        Gdx.input.vibrate(500);
 
                     }
                 }
-
-
             }
 
             @Override
@@ -226,12 +237,12 @@ public class MyGdxGame extends Game {
         float y;
 
         do {
-            x = (float) (Math.random()*(525-(-525)+1)-525);
+            x = (float) (Math.random()*950)+50;
 
         }while (x%32 == 0  && comprueba(x, false));
 
         do {
-            y = (float) (Math.random()*(225-(-225)+1)-225);
+            y = (float) (Math.random()*400)+50;
 
         }while (y%32 == 0  && comprueba(y, true));
 
@@ -294,8 +305,6 @@ public class MyGdxGame extends Game {
 
     public void cameraUpdate(float delta) {
         Vector3 position = camera.position;
-        position.x = 0;
-        position.y = 0;
         camera.position.set(position);
         camera.update();
 
