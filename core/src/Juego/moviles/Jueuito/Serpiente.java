@@ -75,7 +75,7 @@ public class Serpiente {
     public void crea() {
 
 
-        def.position.set(posicionX / PPM, posicionY / PPM);
+        def.position.set(posicionX, posicionY);
         def.fixedRotation = true;
         if (isCabeza) {
 
@@ -87,7 +87,7 @@ public class Serpiente {
         body = world.createBody(def);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(with / 2 / PPM, height / 2 / PPM);
+        shape.setAsBox(with / 2, height / 2);
 
         Fixture fix = body.createFixture(shape, 1.0f);
         if (isCabeza) {
@@ -101,12 +101,13 @@ public class Serpiente {
 
 
         if (isCabeza) {
-            batch.draw(imagen, getPosicionX()*70+30, getPosicionY()*70+30, 500, 500);
+
+            batch.draw(imagen, ((getPosicionX() - 80) * 2), ((getPosicionY() - 140) * 2), 500, 500);
 
 
         } else {
 
-            batch.draw(imagen, getPosicionX()*70+30, getPosicionY()*70+30, 500, 500);
+            batch.draw(imagen, ((getPosicionX() - 110) * 2), ((getPosicionY() - 140) * 2), 500, 500);
 
         }
 

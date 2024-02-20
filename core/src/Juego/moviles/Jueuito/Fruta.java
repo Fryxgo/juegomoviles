@@ -1,21 +1,14 @@
 package Juego.moviles.Jueuito;
 
-import static Juego.moviles.Jueuito.Constantes.PPM;
-
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Fruta {
 
@@ -27,12 +20,13 @@ public class Fruta {
     SpriteBatch batch;
 
     World world;
+    boolean isgomu;
 
-    public Fruta(float posicionX, float posicionY, World world) {
+    public Fruta(float posicionX, float posicionY, World world, boolean isgomu) {
         this.world = world;
         this.posicionX = posicionX;
         this.posicionY = posicionY;
-
+        this.isgomu = isgomu;
 
         crea();
     }
@@ -54,14 +48,15 @@ public class Fruta {
         this.posicionY = posicionY;
     }
 
-    Texture imagenTexture;
+    Texture gomugomu, carne;
+
 
     public void crea() {
 
-        imagenTexture = new Texture(Gdx.files.internal("Fruta/gomugomu.png"));
+        gomugomu = new Texture(Gdx.files.internal("Fruta/gomugomu.png"));
+        carne = new Texture(Gdx.files.internal("Fruta/carne.png"));
 
-
-        def.position.set(posicionX / PPM, posicionY / PPM);
+        def.position.set(posicionX, posicionY);
         def.fixedRotation = true;
 
         def.type = BodyDef.BodyType.DynamicBody;
@@ -69,10 +64,9 @@ public class Fruta {
         body = world.createBody(def);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(32 / 2 / PPM, 32 / 2 / PPM);
+        shape.setAsBox(25 / 2, 25 / 2);
 
         body.createFixture(shape, 1.0f);
-
 
         body.getFixtureList().get(0).setUserData("fruta");
 
@@ -80,9 +74,13 @@ public class Fruta {
 
     public void draw(SpriteBatch batch) {
 
-        batch.draw(imagenTexture, body.getPosition().x*32-32, -body.getPosition().y*32+32, 1500,1500);
+        if (isgomu) {
+            batch.draw(gomugomu, (getPosicionX() - 130) * 2, (getPosicionY() - 165) * 2, 600, 600);
 
+        } else {
+            batch.draw(carne, (getPosicionX() - 130) * 2, (getPosicionY() - 165) * 2, 600, 600);
 
+        }
     }
 
     public void mover(Vector2 vector2) {
@@ -90,8 +88,7 @@ public class Fruta {
         setPosicionX(vector2.x);
         setPosicionY(vector2.y);
 
-        body.setTransform(vector2.x / PPM, vector2.y / PPM, this.body.getAngle());
-
+        body.setTransform(vector2.x, vector2.y, this.body.getAngle());
 
     }
 

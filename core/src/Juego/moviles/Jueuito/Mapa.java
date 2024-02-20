@@ -48,7 +48,7 @@ public class Mapa {
         Vector2[] woldVertices = new Vector2[vertices.length/2];
 
         for (int i = 0; i < woldVertices.length; i++) {
-            woldVertices[i] = new Vector2(vertices[i*2]/32f, vertices[i*2+1]/32f);
+            woldVertices[i] = new Vector2(vertices[i*2], vertices[i*2+1]);
         }
 
         ChainShape chainShape = new ChainShape();

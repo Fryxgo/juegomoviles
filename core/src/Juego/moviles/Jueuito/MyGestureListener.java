@@ -16,7 +16,6 @@ public class MyGestureListener implements GestureDetector.GestureListener {
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
 
-        Gdx.app.log("x",x+":"+y );
         puntoInicioX = x;
         puntoInicioY = y;
 
