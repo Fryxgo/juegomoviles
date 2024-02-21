@@ -6,6 +6,7 @@ import static Juego.moviles.Jueuito.Constantes.PPM;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -95,6 +96,7 @@ public class Serpiente {
         } else {
             fix.setUserData("cabeza");
         }
+
     }
 
     public void draw(SpriteBatch batch, Texture imagen, boolean isCabeza) {

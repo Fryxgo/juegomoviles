@@ -12,6 +12,8 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -269,7 +272,7 @@ public class MyGdxGame extends Game {
             x = (float) (Math.random() * 950) + 50;
             y = (float) (Math.random() * 450) + 50;
 
-        } while (comprueba(x, y));
+        } while (comprueba(x / 2, y / 2));
 
         return new Vector2(x, y);
     }
@@ -277,19 +280,19 @@ public class MyGdxGame extends Game {
 
     public boolean comprueba(float posiX, float posiY) {
 
+        float Serx;
+        float Sery;
 
         for (int i = 0; i < cuerpos.size(); i++) {
 
+            Serx = cuerpos.get(i).getPosicionX() / 2;
+            Sery = cuerpos.get(i).getPosicionY() / 2;
 
-            if (cuerpos.get(i).body.getPosition() != new Vector2(posiX + 20, posiY)) {
-                return false;
-            } else if (cuerpos.get(i).body.getPosition() != new Vector2(posiX - 20, posiY)) {
-                return false;
-            } else if (cuerpos.get(i).body.getPosition() != new Vector2(posiX, posiY + 20)) {
-                return false;
-            } else if (cuerpos.get(i).body.getPosition() != new Vector2(posiX, posiY - 20)) {
-                return false;
-            }
+
+            Polygon p1 = new Polygon(new float[]{Serx - Sery, Serx + Sery, -Serx + Sery, -Serx - Sery});
+            Polygon p2 = new Polygon(new float[]{posiX - posiY, posiX + posiY, -posiX + posiY, -posiX - posiY});
+            Intersector.overlapConvexPolygons(p1, p2);
+
         }
 
         return true;
