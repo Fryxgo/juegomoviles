@@ -287,7 +287,7 @@ public class MyGdxGame extends Game {
                 return false;
             } else if (cuerpos.get(i).body.getPosition() != new Vector2(posiX, posiY + 20)) {
                 return false;
-            } else if (cuerpos.get(i).body.getPosition() != new Vector2(posiX, posiY + 20)) {
+            } else if (cuerpos.get(i).body.getPosition() != new Vector2(posiX, posiY - 20)) {
                 return false;
             }
         }
