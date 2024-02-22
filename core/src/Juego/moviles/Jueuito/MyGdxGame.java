@@ -171,12 +171,13 @@ public class MyGdxGame extends Game {
 
 
                 }
-
+//                if (colision) {
                 if ((contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("cuerpo"))) {
                     Gdx.app.log("hit", "" + contact.getFixtureA().getUserData() + contact.getFixtureB().getUserData());
                     hit = true;
                     Gdx.input.vibrate(500);
 
+//                    }
                 }
             }
 
@@ -294,8 +295,8 @@ public class MyGdxGame extends Game {
 
         do {
 
-            x = (float) (Math.random() * Gdx.graphics.getWidth() / 2 - 220) + 35;
-            y = (float) (Math.random() * Gdx.graphics.getHeight() / 2-20) + 35;
+            x = (float) (Math.random() * 870) + 35;
+            y = (float) (Math.random() * 480) + 35;
 
         } while (comprueba(x, y));
 
