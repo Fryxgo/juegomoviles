@@ -104,8 +104,7 @@ public class Serpiente {
 
         if (isCabeza) {
 
-            batch.draw(imagen, ((getPosicionX() - 80) * 2), ((getPosicionY() - 140) * 2), 500, 500);
-
+            batch.draw(imagen, ((getPosicionX() - 80) * 2f), ((getPosicionY() - 140) * 2), 500, 500);
 
         } else {
 

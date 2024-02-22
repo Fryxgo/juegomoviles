@@ -23,7 +23,7 @@ public class Mapa {
         Body body;
         BodyDef def =  new BodyDef();
         Fixture fixture;
-        def.type = BodyDef.BodyType.DynamicBody;
+        def.type = BodyDef.BodyType.KinematicBody;
         body = world.createBody(def);
 
 
