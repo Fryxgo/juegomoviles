@@ -122,7 +122,7 @@ public class MyGdxGame extends Game {
         batch.dispose();
 
         b2dr.render(world, camera.combined);
-        b2dr.setDrawBodies(true);
+        b2dr.setDrawBodies(false);
 
 
     }
