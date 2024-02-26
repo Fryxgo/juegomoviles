@@ -21,6 +21,8 @@ public class Fruta {
 
     World world;
     boolean isgomu;
+    long tini;
+    boolean flota = false;
 
     public Fruta(float posicionX, float posicionY, World world, boolean isgomu) {
         this.world = world;
@@ -74,13 +76,21 @@ public class Fruta {
 
     public void draw(SpriteBatch batch) {
 
-        if (isgomu) {
-            batch.draw(gomugomu, (getPosicionX() - 130) * 2, (getPosicionY() - 165) * 2, 600, 600);
+        if (System.currentTimeMillis() - tini > 500) {
+
+                tini = System.currentTimeMillis();
+            flota=!flota;
+        }
+
+        if (flota) {
+
+            batch.draw(gomugomu, (getPosicionX() - 130) * 2, (getPosicionY() - 155) * 2, 600, 600);
 
         } else {
-            batch.draw(carne, (getPosicionX() - 130) * 2, (getPosicionY() - 165) * 2, 600, 600);
 
+            batch.draw(gomugomu, (getPosicionX() - 130) * 2, (getPosicionY() - 165) * 2, 600, 600);
         }
+
     }
 
     public void mover(Vector2 vector2) {
