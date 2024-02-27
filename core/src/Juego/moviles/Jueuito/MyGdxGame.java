@@ -4,6 +4,7 @@ import static Juego.moviles.Jueuito.Constantes.PPM;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,9 +25,14 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.sql.Time;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
@@ -57,13 +63,15 @@ public class MyGdxGame extends Game {
     DIR direccion = DIR.NO_DIRECTION, direccionFinal = DIR.LEFT, direccionAnterior = DIR.NO_DIRECTION;
 
     Fruta fruta;
-
     boolean crear = false, colision = true;
-
     Mapa mapa;
-
     Texture imagenCabeza;
     Texture imagenCuerpo;
+    Stage stage;
+    Viewport v;
+    Label labelPuntuacion, labelTiempo;
+    long time, segundos;
+    long minutos = 0;
 
 
     @Override
@@ -76,8 +84,13 @@ public class MyGdxGame extends Game {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w / 2, h / 2);
+
+        v = new ExtendViewport(w / 2, h / 2, camera);
+
+        stage = new Stage(v);
 
         world = new World(new Vector2(0, 0), false);
 
@@ -97,6 +110,13 @@ public class MyGdxGame extends Game {
 
         fruta = new Fruta(250, 225, world, false);
 
+        UICreator.createLabel("@string/puntuacion", 30, Color.WHITE, new Vector2(970, 500), stage);
+
+        time = System.currentTimeMillis();
+
+        labelPuntuacion = UICreator.createLabel("0", 30, Color.WHITE, new Vector2(1035, 470), stage);
+        labelTiempo = UICreator.createLabel("", 30, Color.WHITE, new Vector2(1010, 430), stage);
+
 
     }
 
@@ -108,9 +128,24 @@ public class MyGdxGame extends Game {
         update(Gdx.graphics.getDeltaTime());
 
         SpriteBatch batch = new SpriteBatch();
+
+
+        tmr.render();
+
+        stage.getCamera().update();
+        stage.getViewport().apply();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+
+        labelPuntuacion.setText((cuerpos.size() - 3) * 10 + "");
+
+        segundos = (System.currentTimeMillis() - time) / 1000;
+
+        labelTiempo.setText(String.format("%02.0f : %02.0f", (float) (segundos / 60), (float) (segundos % 60)));
+
+
         batch.begin();
         cuerpos.get(0).draw(batch, imagenCabeza, true);
-
         for (int i = 1; i < cuerpos.size(); i++) {
 
             cuerpos.get(i).draw(batch, imagenCuerpo, false);
@@ -272,9 +307,9 @@ public class MyGdxGame extends Game {
         }
 
         if (cabeza.getPosicionY() > Gdx.graphics.getHeight() / 2) {
-            cabeza.mover(cabeza.getPosicionX(),30 );
+            cabeza.mover(cabeza.getPosicionX(), 30);
         } else {
-            if (cabeza.getPosicionY() <30) {
+            if (cabeza.getPosicionY() < 30) {
 
                 cabeza.mover(cabeza.getPosicionX(), Gdx.graphics.getHeight() / 2);
             }
@@ -357,7 +392,6 @@ public class MyGdxGame extends Game {
 
     public void cameraUpdate(float delta) {
         Vector3 position = camera.position;
-        Viewport v;
         camera.position.set(position);
         camera.update();
 

@@ -16,6 +16,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Serpiente {
 
+
+    Texture bocaabiertga = new Texture(Gdx.files.internal("Serpiente/bocaabierta.png"));
+
+    long tini;
+    boolean flota = false;
     private float posicionX, posicionY;
 
     private float posicionAnteriorX;
@@ -102,9 +107,22 @@ public class Serpiente {
     public void draw(SpriteBatch batch, Texture imagen, boolean isCabeza) {
 
 
-        if (isCabeza) {
 
-            batch.draw(imagen, ((getPosicionX() - 80) * 2f), ((getPosicionY() - 140) * 2), 500, 500);
+        if (isCabeza) {
+            if (System.currentTimeMillis() - tini > 500) {
+
+                tini = System.currentTimeMillis();
+                flota = !flota;
+            }
+
+            if (flota) {
+
+                batch.draw(imagen, ((getPosicionX() - 80) * 2f), ((getPosicionY() - 140) * 2), 500, 500);
+
+            } else {
+
+                batch.draw(bocaabiertga, ((getPosicionX() - 80) * 2f), ((getPosicionY() - 140) * 2), 500, 500);
+            }
 
         } else {
 

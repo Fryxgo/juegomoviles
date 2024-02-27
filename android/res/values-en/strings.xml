@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Phyton Piece</string>
-    <string name="puntuacion">Puntuacion</string>
 
-
+    <string name="puntuacion">Score</string>
 </resources>

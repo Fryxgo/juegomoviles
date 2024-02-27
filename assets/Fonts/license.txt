@@ -1,0 +1,24 @@
+License info:
+When you purchase a font, you get a non-exclusive license to use it in your work. The licenses on this website are for installing on desktop computers. If you have any question, or your are searching for web, ePub, extended, educacional or testing licenses, just contact me at fernando@fandofonts.com.
+
+End User License Agreement:
+By downloading and/or installing font software from Fernando Fuentes/ Fando Fonts, you agree to be bound by the terms of this Agreement:
+1. Allowed Uses:
+When you purchase a font, you get a non-exclusive license to use it in your work.
+You may use the licensed fonts for all your personal or professional work.
+You may embed the licensed font into read-only PDF documents.
+You may not link the licensed font to web sites using the @font-face selector in CSS. A webfont license allowing @font-face usage is required. You can contact me to get a licensed webfont.
+You may not create letterform products for resale where the product consists of individual letterforms, like rubber stamps, where the likeness of the licensed fonts can be reproduced and the end-user can create their own typesetting.
+2. Number of Users
+This license allows you to install and use the font on a limited number of workstations defined in your order summary. All of these workstations must belong to the same individual, company, or organization that is licensing the font.
+3. Third parties and Transferability
+You may provide the font to a graphic designer, printer or other outputting service that is working on your behalf only if they agree to use the font exclusively for your work, agree to the terms of this license, and retain no copies of the font on completion of the work.
+You may not distribute, share or resell the font to third parties or make the font publicly accessible.
+4. Modifications:
+You may import and alter the bezier outlines of the licensed font in a drawing program.
+You may not modify the licensed font or create derivative works based on the licensed font without prior written consent from Fernando Fuentes / Fando Fonts.
+5. Copyright:
+You agree that the licensed font is the exclusive property of Albert Monteys and Fernando Fuentes/ Fando Fonts and is protected by copyright and intellectual property laws.
+6. Fernando Fuentes / Fando Fonts shall not be liable for any direct, indirect, consequential, or incidental damages (including damages from loss of business profits, business interruption, loss of business information, and the like) arising out of the use of or inability to use the product even if the foundry has been advised of the possibility of such damages.
+7. Disclaimer and Limited Warranty: Any replacement product will be warranted for twenty one (21) days.
+Please, contact me at fernando@fandofonts.com for any doubts or more info.
