@@ -206,13 +206,11 @@ public class MyGdxGame extends Game {
 
 
                 }
-//                if (colision) {
                 if ((contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("cuerpo"))) {
                     Gdx.app.log("hit", "" + contact.getFixtureA().getUserData() + contact.getFixtureB().getUserData());
                     hit = true;
                     Gdx.input.vibrate(500);
 
-//                    }
                 }
             }
 
@@ -353,7 +351,10 @@ public class MyGdxGame extends Game {
             Rectangle rectangle1 = new Rectangle(Serx, Sery, 32, 32);
             Rectangle rectangle2 = new Rectangle(posiX, posiY, 25, 25);
 
-            return Intersector.overlaps(rectangle1, rectangle2);
+
+            if (Intersector.overlaps(rectangle1, rectangle2)) {
+                return true;
+            }
 
         }
 
