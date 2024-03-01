@@ -117,16 +117,16 @@ public class Serpiente {
 
             if (flota) {
 
-                batch.draw(imagen, ((getPosicionX() - 80) * 2f), ((getPosicionY() - 140) * 2), 450, 450);
+                batch.draw(imagen, ((getPosicionX() - 70) * 2f), ((getPosicionY() - 130) * 2), 450, 450);
 
             } else {
 
-                batch.draw(bocaabiertga, ((getPosicionX() - 80) * 2f), ((getPosicionY() - 140) * 2), 450, 450);
+                batch.draw(bocaabiertga, ((getPosicionX() - 70) * 2f), ((getPosicionY() - 130) * 2), 450, 450);
             }
 
         } else {
 
-            batch.draw(imagen, ((getPosicionX() - 110) * 2), ((getPosicionY() - 140) * 2), 450, 450);
+            batch.draw(imagen, ((getPosicionX() - 100) * 2), ((getPosicionY() - 130) * 2), 450, 450);
 
         }
 

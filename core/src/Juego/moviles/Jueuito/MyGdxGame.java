@@ -103,7 +103,7 @@ public class MyGdxGame extends Game {
         player = new Serpiente(32, 32, 525, 225, world, false);
         cuerpos.add(player);
 
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 8; i++) {
 
             cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
         }
@@ -157,7 +157,7 @@ public class MyGdxGame extends Game {
         batch.dispose();
 
         b2dr.render(world, camera.combined);
-        b2dr.setDrawBodies(false);
+        b2dr.setDrawBodies(true);
 
 
     }
@@ -253,7 +253,6 @@ public class MyGdxGame extends Game {
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -299,7 +298,7 @@ public class MyGdxGame extends Game {
         if (cabeza.getPosicionX() > Gdx.graphics.getWidth() / 2 - 250) {
             cabeza.mover(30, cabeza.getPosicionY());
         } else {
-            if (cabeza.getPosicionX() < 30) {
+            if (cabeza.getPosicionX() < 10) {
                 cabeza.mover(Gdx.graphics.getWidth() / 2 - 250, cabeza.getPosicionY());
             }
         }
@@ -307,7 +306,7 @@ public class MyGdxGame extends Game {
         if (cabeza.getPosicionY() > Gdx.graphics.getHeight() / 2) {
             cabeza.mover(cabeza.getPosicionX(), 30);
         } else {
-            if (cabeza.getPosicionY() < 30) {
+            if (cabeza.getPosicionY() < 10) {
 
                 cabeza.mover(cabeza.getPosicionX(), Gdx.graphics.getHeight() / 2);
             }
