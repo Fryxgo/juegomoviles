@@ -28,6 +28,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -47,21 +48,13 @@ public class MyGdxGame extends Game {
     private OrthogonalTiledMapRenderer tmr;
     private Box2DDebugRenderer b2dr;
     private World world;
-
     Serpiente player, cuerpo;
-
-
     boolean movimiento = true;
-
     long tini = 0;
-
     float x, y, creaX, creaY;
     ArrayList<Serpiente> cuerpos = new ArrayList<>(3);
-
     boolean hit = false;
-
     DIR direccion = DIR.NO_DIRECTION, direccionFinal = DIR.LEFT, direccionAnterior = DIR.NO_DIRECTION;
-
     Fruta fruta;
     boolean crear = false, colision = true;
     Mapa mapa;
@@ -70,6 +63,7 @@ public class MyGdxGame extends Game {
     Stage stage;
     Viewport v;
     Label labelPuntuacion, labelTiempo;
+    private I18NBundle lang;
     long time, segundos;
     long minutos = 0;
 
@@ -77,8 +71,8 @@ public class MyGdxGame extends Game {
     @Override
     public void create() {
 
+        lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
         imagenCabeza = new Texture(Gdx.files.internal("Serpiente/cabeza.png"));
-
         imagenCuerpo = new Texture(Gdx.files.internal("Serpiente/cuerpo.png"));
 
         float w = Gdx.graphics.getWidth();
@@ -110,7 +104,7 @@ public class MyGdxGame extends Game {
 
         fruta = new Fruta(250, 225, world, false);
 
-        UICreator.createLabel("@string/puntuacion", 30, Color.WHITE, new Vector2(970, 500), stage);
+        UICreator.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(970, 500), stage);
 
         time = System.currentTimeMillis();
 
