@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.Align;
 
 public class UICreator {
     private static FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/FonteysCAPS-05regular.otf"));
@@ -55,7 +56,7 @@ public class UICreator {
      * @param stage    stage donde se añade para dibujarlo
      * @return
      */
-    public static TextButton createTextButton(String text, int textSize, Vector2 pos, float width, float height, Skin skin, String drawable, Stage stage) {
+    public static TextButton createTextButton(String text, int textSize, Vector2 pos, float width, float height, Skin skin, String drawable, Stage stage, int pad) {
         parameter.size = textSize;
         font = generator.generateFont(parameter);
 
@@ -64,6 +65,7 @@ public class UICreator {
         textButtonStyle.up = skin.getDrawable(drawable);
         TextButton textButton = new TextButton(text, textButtonStyle);
         textButton.setBounds(pos.x, pos.y, width, height);
+        textButton.getLabelCell().padBottom(pad);
         stage.addActor(textButton);
         return textButton;
     }
@@ -76,14 +78,14 @@ public class UICreator {
      * @param height    alto del boton
      * @param skin      texturas a usar
      * @param drawable  textura especifica
-     * @param drawable2 textura de la imagen del boton
+     * @param drawable textura de la imagen del boton
      * @param stage     stage donde se añade para dibujarlo
      * @return
      */
-    public static ImageButton createImageButton(Vector2 pos, float width, float height, Skin skin, String drawable, String drawable2, Stage stage) {
+    public static ImageButton createImageButton(Vector2 pos, float width, float height, Skin skin, String drawable, Stage stage) {
         ImageButtonStyle imageButtonStyle = new ImageButtonStyle();
         imageButtonStyle.up = skin.getDrawable(drawable);
-        imageButtonStyle.imageUp = skin.getDrawable(drawable2);
+        imageButtonStyle.imageUp = skin.getDrawable(drawable);
         imageButtonStyle.imageUp.setMinWidth(width - 10);
         imageButtonStyle.imageUp.setMinHeight(height - 10);
         ImageButton imageButton = new ImageButton(imageButtonStyle);

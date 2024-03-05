@@ -1,9 +1,13 @@
-package Juego.moviles.Jueuito;
+package Juego.moviles.Jueuito.Screens;
 
 import static Juego.moviles.Jueuito.Constantes.PPM;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,8 +29,12 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -41,8 +49,14 @@ import java.util.Vector;
 import javax.swing.DebugGraphics;
 
 import Juego.moviles.Jueuito.Constantes.DIR;
+import Juego.moviles.Jueuito.Fruta;
+import Juego.moviles.Jueuito.MainClass;
+import Juego.moviles.Jueuito.Mapa;
+import Juego.moviles.Jueuito.MyGestureListener;
+import Juego.moviles.Jueuito.Serpiente;
+import Juego.moviles.Jueuito.UICreator;
 
-public class MyGdxGame extends Game {
+public class MyGdxGame implements Screen {
 
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer tmr;
@@ -62,27 +76,32 @@ public class MyGdxGame extends Game {
     Texture imagenCuerpo;
     Stage stage;
     Viewport v;
-    Label labelPuntuacion, labelTiempo;
+    Label labelPuntuacion, labelTiempo, labelRecord;
     private I18NBundle lang;
     long time, segundos;
     long minutos = 0;
+    MainClass mainclass;
+    int records;
+    Preferences record = Gdx.app.getPreferences("Records");
+    boolean pause = false;
 
 
-    @Override
-    public void create() {
+    public MyGdxGame(final MainClass mainclass) {
 
+        Gdx.input.setCatchKey(Input.Keys.BACK,true);
+
+        this.mainclass =  mainclass;
         lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
         imagenCabeza = new Texture(Gdx.files.internal("Serpiente/cabeza.png"));
         imagenCuerpo = new Texture(Gdx.files.internal("Serpiente/cuerpo.png"));
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w / 2, h / 2);
+        camera.setToOrtho(false, x / 2, y / 2);
 
-        v = new ExtendViewport(w / 2, h / 2, camera);
+        v = new ExtendViewport(x / 2, y / 2, camera);
 
         stage = new Stage(v);
 
@@ -97,32 +116,55 @@ public class MyGdxGame extends Game {
         player = new Serpiente(32, 32, 525, 225, world, false);
         cuerpos.add(player);
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 3; i++) {
 
             cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
         }
 
         fruta = new Fruta(250, 225, world, false);
 
-        UICreator.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(970, 500), stage);
-
         time = System.currentTimeMillis();
 
-        labelPuntuacion = UICreator.createLabel("0", 30, Color.WHITE, new Vector2(1035, 470), stage);
-        labelTiempo = UICreator.createLabel("", 30, Color.WHITE, new Vector2(1010, 430), stage);
+
+        UICreator.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(x/3+200, y/3+100), stage);
+        labelPuntuacion = UICreator.createLabel("0", 30, Color.WHITE, new Vector2(x/3+255, y/3+70), stage);
+        labelTiempo = UICreator.createLabel("", 30, Color.WHITE, new Vector2(x/3+230, y/3+30), stage);
+
+
+        labelRecord = UICreator.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30,Color.WHITE, new  Vector2(x/3+200, y/3-30), stage);
+
+        Skin skin = new Skin();
+        skin.add("btnPause", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
+
+        Button btn = UICreator.createTextButton("Pause",20,new Vector2(x/2-150,y/6+30),75,60,skin,"btnPause",stage, 20);
+
+        btn.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                Gdx.input.vibrate(100);
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+              pause =  !pause;
+            }
+        });
 
 
     }
 
+
+
     @Override
-    public void render() {
+    public void render(float delta) {
 
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         update(Gdx.graphics.getDeltaTime());
-
         SpriteBatch batch = new SpriteBatch();
-
 
         tmr.render();
 
@@ -146,20 +188,45 @@ public class MyGdxGame extends Game {
         }
 
         fruta.draw(batch);
-
         batch.end();
         batch.dispose();
 
-        b2dr.render(world, camera.combined);
-        b2dr.setDrawBodies(true);
+        InputMultiplexer toroide = new InputMultiplexer();
+        toroide.addProcessor(stage);
+        toroide.addProcessor(new GestureDetector(new MyGestureListener()));
 
+        Gdx.input.setInputProcessor(toroide);
+
+        b2dr.render(world, camera.combined);
+        b2dr.setDrawBodies(false);
 
     }
+
+    @Override
+    public void show() {
+
+    }
+
 
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false, width / 2, height / 2);
 
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
 
     }
 
@@ -205,6 +272,8 @@ public class MyGdxGame extends Game {
                     hit = true;
                     Gdx.input.vibrate(500);
 
+                    record.putInteger("HighScore",Integer.parseInt(labelPuntuacion.getText().toString()));
+                    record.flush();
                 }
             }
 
@@ -229,9 +298,8 @@ public class MyGdxGame extends Game {
 
     public void setMovimiento(float tick) {
 
-        if (!hit) {
+        if (!hit && !pause) {
 
-            Gdx.input.setInputProcessor(new GestureDetector(new MyGestureListener()));
             direccion = MyGestureListener.direccion();
 
             if (movimiento) {

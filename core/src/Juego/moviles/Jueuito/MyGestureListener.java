@@ -19,6 +19,8 @@ public class MyGestureListener implements GestureDetector.GestureListener {
         puntoInicioX = x;
         puntoInicioY = y;
 
+
+
         return false;
     }
 
