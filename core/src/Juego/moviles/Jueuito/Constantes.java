@@ -7,12 +7,6 @@ import java.util.Vector;
 
 public class Constantes {
 
-    public final static float woldHeight = 480;
-
-   public final static float PPM = 32;
-
-   public final static float woldWidth = Gdx.graphics.getWidth()/PPM;
-
     public static enum DIR {
         RIGHT (new Vector2(32.05f, 0)),
         LEFT (new Vector2(-32.05f,0)),

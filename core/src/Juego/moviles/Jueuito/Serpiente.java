@@ -1,8 +1,6 @@
 package Juego.moviles.Jueuito;
 
 
-import static Juego.moviles.Jueuito.Constantes.PPM;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

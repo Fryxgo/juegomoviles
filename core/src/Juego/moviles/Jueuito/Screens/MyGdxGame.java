@@ -1,6 +1,5 @@
 package Juego.moviles.Jueuito.Screens;
 
-import static Juego.moviles.Jueuito.Constantes.PPM;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -85,12 +84,11 @@ public class MyGdxGame implements Screen {
     Preferences record = Gdx.app.getPreferences("Records");
     boolean pause = false;
 
-
     public MyGdxGame(final MainClass mainclass) {
 
-        Gdx.input.setCatchKey(Input.Keys.BACK,true);
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
 
-        this.mainclass =  mainclass;
+        this.mainclass = mainclass;
         lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
         imagenCabeza = new Texture(Gdx.files.internal("Serpiente/cabeza.png"));
         imagenCuerpo = new Texture(Gdx.files.internal("Serpiente/cuerpo.png"));
@@ -102,11 +100,8 @@ public class MyGdxGame implements Screen {
         camera.setToOrtho(false, x / 2, y / 2);
 
         v = new ExtendViewport(x / 2, y / 2, camera);
-
         stage = new Stage(v);
-
         world = new World(new Vector2(0, 0), false);
-
         b2dr = new Box2DDebugRenderer();
 
         TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
@@ -116,8 +111,7 @@ public class MyGdxGame implements Screen {
         player = new Serpiente(32, 32, 525, 225, world, false);
         cuerpos.add(player);
 
-        for (int i = 1; i < 3; i++) {
-
+        for (int i = 1; i < 8; i++) {
             cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
         }
 
@@ -126,36 +120,33 @@ public class MyGdxGame implements Screen {
         time = System.currentTimeMillis();
 
 
-        UICreator.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(x/3+200, y/3+100), stage);
-        labelPuntuacion = UICreator.createLabel("0", 30, Color.WHITE, new Vector2(x/3+255, y/3+70), stage);
-        labelTiempo = UICreator.createLabel("", 30, Color.WHITE, new Vector2(x/3+230, y/3+30), stage);
+        UICreator.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 + 100), stage);
+        labelPuntuacion = UICreator.createLabel("0", 30, Color.WHITE, new Vector2(x / 3 + 255, y / 3 + 70), stage);
+        labelTiempo = UICreator.createLabel("", 30, Color.WHITE, new Vector2(x / 3 + 230, y / 3 + 30), stage);
 
 
-        labelRecord = UICreator.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30,Color.WHITE, new  Vector2(x/3+200, y/3-30), stage);
+        labelRecord = UICreator.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 - 30), stage);
 
         Skin skin = new Skin();
         skin.add("btnPause", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
+        Button btn = UICreator.createTextButton("Pause", 20, new Vector2(x / 2 - 150, y / 6 + 30), 75, 60, skin, "btnPause", stage, 20);
 
-        Button btn = UICreator.createTextButton("Pause",20,new Vector2(x/2-150,y/6+30),75,60,skin,"btnPause",stage, 20);
-
-        btn.addListener(new InputListener(){
+        btn.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
                 Gdx.input.vibrate(100);
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-              pause =  !pause;
+                pause = !pause;
             }
         });
 
 
     }
-
 
 
     @Override
@@ -217,12 +208,12 @@ public class MyGdxGame implements Screen {
 
     @Override
     public void pause() {
-
+        pause = true;
     }
 
     @Override
     public void resume() {
-
+        pause = false;
     }
 
     @Override
@@ -234,6 +225,7 @@ public class MyGdxGame implements Screen {
     public void dispose() {
         world.dispose();
         b2dr.dispose();
+        this.dispose();
     }
 
     public void update(float delta) {
@@ -260,20 +252,22 @@ public class MyGdxGame implements Screen {
 
 
                 if (contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("fruta")) {
-
                     crear = true;
                     colision = false;
                     Gdx.input.vibrate(100);
-
-
                 }
                 if ((contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("cuerpo"))) {
                     Gdx.app.log("hit", "" + contact.getFixtureA().getUserData() + contact.getFixtureB().getUserData());
                     hit = true;
                     Gdx.input.vibrate(500);
 
-                    record.putInteger("HighScore",Integer.parseInt(labelPuntuacion.getText().toString()));
+                    if (record.getInteger("HighScore") < Integer.parseInt(labelPuntuacion.getText().toString())) {
+                        record.putInteger("HighScore", Integer.parseInt(labelPuntuacion.getText().toString()));
+
+                    }
                     record.flush();
+
+                    mainclass.setScreen(new GameOver(mainclass));
                 }
             }
 
