@@ -27,10 +27,10 @@ public class MainMenu implements Screen {
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
     Stage stage;
     Viewport v;
-
     Button btnPlay;
-
     MainClass mainClass;
+
+    boolean isGiroscopio = false;
 
     public MainMenu(final MainClass mainClass) {
 
@@ -58,7 +58,7 @@ public class MainMenu implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mainClass.setScreen(new MyGdxGame(mainClass));
+                mainClass.setScreen(new MyGdxGame(mainClass, false));
             }
         });
     }

@@ -83,11 +83,13 @@ public class MyGdxGame implements Screen {
     int records;
     Preferences record = Gdx.app.getPreferences("Records");
     boolean pause = false;
+    boolean isGiroscopio;
 
-    public MyGdxGame(final MainClass mainclass) {
+    public MyGdxGame(final MainClass mainclass, boolean isGiroscopio) {
 
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
 
+        this.isGiroscopio = isGiroscopio;
         this.mainclass = mainclass;
         lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
         imagenCabeza = new Texture(Gdx.files.internal("Serpiente/cabeza.png"));
@@ -294,24 +296,30 @@ public class MyGdxGame implements Screen {
 
         if (!hit && !pause) {
 
-            direccion = MyGestureListener.direccion();
+            if (!isGiroscopio) {
+                
+                direccion = MyGestureListener.direccion();
 
-            if (movimiento) {
-                if (direccion != DIR.NO_DIRECTION) {
-                    if (!(direccionAnterior == DIR.DOWN && direccion == DIR.UP)) {
-                        if (!(direccionAnterior == DIR.UP && direccion == DIR.DOWN)) {
-                            if (!(direccionAnterior == DIR.LEFT && direccion == DIR.RIGHT)) {
-                                if (!(direccionAnterior == DIR.RIGHT && direccion == DIR.LEFT)) {
+                if (compruebaDireccion()) {
 
-                                    direccionFinal = direccion;
-                                    movimiento = false;
+                    if (movimiento) {
 
-                                }
-                            }
-                        }
+                        direccionFinal = direccion;
+                        movimiento = false;
+                    }
+                }
+            } else {
+                        direccion = DireccionAcelerometro();
+
+                if (compruebaDireccion()) {
+                    if (movimiento) {
+
+                        direccionFinal = direccion;
+                        movimiento = false;
                     }
                 }
             }
+
 
             if (System.currentTimeMillis() - tini > tick) {
                 movimiento = true;
@@ -346,6 +354,36 @@ public class MyGdxGame implements Screen {
 
         }
 
+    }
+
+    public boolean compruebaDireccion() {
+
+        if (direccion != DIR.NO_DIRECTION) {
+            if (!(direccionAnterior == DIR.DOWN && direccion == DIR.UP)) {
+                if (!(direccionAnterior == DIR.UP && direccion == DIR.DOWN)) {
+                    if (!(direccionAnterior == DIR.LEFT && direccion == DIR.RIGHT)) {
+                        if (!(direccionAnterior == DIR.RIGHT && direccion == DIR.LEFT)) {
+
+
+                            return true;
+
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    public DIR DireccionAcelerometro() {
+
+
+        Gdx.app.log("Z", Gdx.input.getAccelerometerY() + "");
+
+
+        return direccionFinal;
     }
 
     public void compruebaCabeza() {
