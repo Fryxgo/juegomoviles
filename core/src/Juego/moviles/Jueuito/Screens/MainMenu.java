@@ -122,6 +122,20 @@ public class MainMenu implements Screen {
         });
         btnAyuda= UICrea.createTextButton(lang.get("mainmenu.help"),30, new Vector2(w / 5+120, h / 8-100),200,90,skin,"btnPlay", stage, 50);
 
+        btnAyuda.addListener(new InputListener(){
+
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.input.vibrate(100);
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+                mainClass.setScreen(new Help(mainClass));
+
+            }
+        });
     }
 
 
