@@ -26,6 +26,7 @@ public class GameOver implements Screen {
     MainClass mainclass;
 
     public GameOver(final MainClass mainClass) {
+
         this.mainclass = mainClass;
 
         float w = Gdx.graphics.getWidth();

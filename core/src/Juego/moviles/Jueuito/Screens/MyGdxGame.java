@@ -32,10 +32,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -53,6 +55,7 @@ import Juego.moviles.Jueuito.MainClass;
 import Juego.moviles.Jueuito.Mapa;
 import Juego.moviles.Jueuito.MyGestureListener;
 import Juego.moviles.Jueuito.Serpiente;
+import Juego.moviles.Jueuito.Sonidos;
 import Juego.moviles.Jueuito.UICreator;
 
 public class MyGdxGame implements Screen {
@@ -83,13 +86,14 @@ public class MyGdxGame implements Screen {
     int records;
     Preferences record = Gdx.app.getPreferences("Records");
     boolean pause = false;
-    boolean isGiroscopio;
 
-    public MyGdxGame(final MainClass mainclass, boolean isGiroscopio) {
+    MyGdxGame juego = this;
+    Sonidos sonidos;
+
+    public MyGdxGame(final MainClass mainclass) {
 
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
 
-        this.isGiroscopio = isGiroscopio;
         this.mainclass = mainclass;
         lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
         imagenCabeza = new Texture(Gdx.files.internal("Serpiente/cabeza.png"));
@@ -106,6 +110,13 @@ public class MyGdxGame implements Screen {
         world = new World(new Vector2(0, 0), false);
         b2dr = new Box2DDebugRenderer();
 
+        Skin skin = new Skin();
+        skin.add("btnPause", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
+        skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
+        skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
+        Image fondo = UICreator.createImage(new Vector2(0,0), x /2,y/2,skin,"Fondo",stage);
+
+        Button btn = UICreator.createTextButton("Pause", 15, new Vector2(x / 2 - 150, y / 6 + 30), 75, 60, skin, "btnPause", stage, 20);
         TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
         tmr = new OrthogonalTiledMapRenderer(tiledMap);
         mapa = new Mapa(world, tiledMap.getLayers().get("Colisiones").getObjects());
@@ -129,24 +140,47 @@ public class MyGdxGame implements Screen {
 
         labelRecord = UICreator.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 - 30), stage);
 
-        Skin skin = new Skin();
-        skin.add("btnPause", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
-        Button btn = UICreator.createTextButton("Pause", 20, new Vector2(x / 2 - 150, y / 6 + 30), 75, 60, skin, "btnPause", stage, 20);
-
         btn.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(100);
+
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 pause = !pause;
+                if (pause){
+                    MainClass.music.pause();
+                }else {
+                    MainClass.music.play();
+                }
             }
         });
 
+        Button btnOptions = UICreator.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(x / 3+220, y / 9),120,60,skin,"btnPlay", stage, 30);
+        btnOptions.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                Gdx.input.vibrate(100);
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+                mainclass.setScreen(new Opciones(juego));
+
+            }
+
+
+        });
+
+        sonidos = new Sonidos("Sonidos/comer.mp3");
 
     }
 
@@ -159,13 +193,13 @@ public class MyGdxGame implements Screen {
         update(Gdx.graphics.getDeltaTime());
         SpriteBatch batch = new SpriteBatch();
 
-        tmr.render();
 
         stage.getCamera().update();
         stage.getViewport().apply();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
+        tmr.render();
         labelPuntuacion.setText((cuerpos.size() - 3) * 10 + "");
 
         segundos = (System.currentTimeMillis() - time) / 1000;
@@ -193,6 +227,8 @@ public class MyGdxGame implements Screen {
         b2dr.render(world, camera.combined);
         b2dr.setDrawBodies(false);
 
+
+
     }
 
     @Override
@@ -204,7 +240,6 @@ public class MyGdxGame implements Screen {
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false, width / 2, height / 2);
-
 
     }
 
@@ -257,6 +292,8 @@ public class MyGdxGame implements Screen {
                     crear = true;
                     colision = false;
                     Gdx.input.vibrate(100);
+                    sonidos.play(false);
+
                 }
                 if ((contact.getFixtureA().getUserData().equals("cabeza") && contact.getFixtureB().getUserData().equals("cuerpo"))) {
                     Gdx.app.log("hit", "" + contact.getFixtureA().getUserData() + contact.getFixtureB().getUserData());
@@ -296,7 +333,7 @@ public class MyGdxGame implements Screen {
 
         if (!hit && !pause) {
 
-            if (!isGiroscopio) {
+            if (!MainMenu.isGiroscopio) {
                 
                 direccion = MyGestureListener.direccion();
 
@@ -379,11 +416,26 @@ public class MyGdxGame implements Screen {
 
     public DIR DireccionAcelerometro() {
 
+        DIR giro = DIR.NO_DIRECTION;
+         if (Math.abs(Gdx.input.getAccelerometerY())> Math.abs(Gdx.input.getAccelerometerZ())){
+             if (Gdx.input.getAccelerometerY()>5){
+                 giro = DIR.RIGHT;
+             }
+             if (Gdx.input.getAccelerometerY()<5){
+                 giro = DIR.LEFT;
+             }
 
-        Gdx.app.log("Z", Gdx.input.getAccelerometerY() + "");
+         }else {
+             if (Gdx.input.getAccelerometerZ()>5){
+                 giro = DIR.DOWN;
+             }
+             if (Gdx.input.getAccelerometerZ()<5){
+                 giro = DIR.UP;
+             }
+         }
 
+         return giro;
 
-        return direccionFinal;
     }
 
     public void compruebaCabeza() {

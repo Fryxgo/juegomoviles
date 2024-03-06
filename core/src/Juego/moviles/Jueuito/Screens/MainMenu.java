@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -27,10 +28,9 @@ public class MainMenu implements Screen {
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
     Stage stage;
     Viewport v;
-    Button btnPlay;
+    Button btnPlay, btnOptions;
     MainClass mainClass;
-
-    boolean isGiroscopio = false;
+    public static boolean isGiroscopio = false;
 
     public MainMenu(final MainClass mainClass) {
 
@@ -46,8 +46,9 @@ public class MainMenu implements Screen {
 
         Skin skin = new Skin();
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
-
-        btnPlay = UICreator.createTextButton(lang.get("mainmenu.start"), 30, new Vector2(Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 6), 250, 100, skin, "btnPlay", stage, 50);
+        skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
+        Image fondo = UICreator.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
+        btnPlay = UICreator.createTextButton(lang.get("mainmenu.start"), 30, new Vector2(w / 5, h / 5), 250, 90, skin, "btnPlay", stage, 50);
         btnPlay.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -58,9 +59,32 @@ public class MainMenu implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mainClass.setScreen(new MyGdxGame(mainClass, false));
+                mainClass.setScreen(new MyGdxGame(mainClass));
             }
+
         });
+
+        btnOptions = UICreator.createTextButton(lang.get("mainmenu.settings"),30, new Vector2(w / 5+25, h / 8-15),200,90,skin,"btnPlay", stage, 50);
+        btnOptions.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                Gdx.input.vibrate(100);
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+                mainClass.setScreen(new Opciones(mainClass));
+
+            }
+
+
+        });
+
+
     }
 
 
@@ -75,11 +99,9 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         Vector3 position = camera.position;
         camera.position.set(position);
         camera.update();
-
 
         stage.getCamera().update();
         stage.getViewport().apply();

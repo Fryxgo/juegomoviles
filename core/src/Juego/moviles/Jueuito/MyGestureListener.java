@@ -71,6 +71,7 @@ public class MyGestureListener implements GestureDetector.GestureListener {
     public void pinchStop() {
     }
 
+
     /**
      * hola javi :) no me suspendas :))))))
      *
