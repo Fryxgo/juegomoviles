@@ -15,6 +15,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Mapa {
 
+    /**
+     * constrtcutor del mapa
+     * @param world el mundo
+     * @param mapObjects
+     */
     public Mapa(World world, MapObjects mapObjects) {
 
         for (MapObject object : mapObjects) {
@@ -26,14 +31,6 @@ public class Mapa {
         def.type = BodyDef.BodyType.KinematicBody;
         body = world.createBody(def);
 
-
-        if (object instanceof PolylineMapObject)  {
-            shape = create((PolylineMapObject) object);
-
-        }else{
-            continue;
-        }
-
         fixture = body.createFixture(shape, 1f);
         fixture.setUserData("Pared");
         shape.dispose();
@@ -42,18 +39,5 @@ public class Mapa {
 
     }
 
-    private ChainShape create(PolylineMapObject polygon){
 
-        float[] vertices = polygon.getPolyline().getTransformedVertices();
-        Vector2[] woldVertices = new Vector2[vertices.length/2];
-
-        for (int i = 0; i < woldVertices.length; i++) {
-            woldVertices[i] = new Vector2(vertices[i*2], vertices[i*2+1]);
-        }
-
-        ChainShape chainShape = new ChainShape();
-        chainShape.createChain(woldVertices);
-
-        return chainShape;
-    }
 }

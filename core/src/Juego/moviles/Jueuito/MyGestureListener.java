@@ -12,7 +12,14 @@ public class MyGestureListener implements GestureDetector.GestureListener {
     static float puntoInicioX, puntoInicioY, puntoFinalX, puntoFinalY;
     static boolean touch = false;
 
-
+    /**
+     *
+     * @param x posicion en al tocar por primera vez en x
+     * @param y poscion en al tocar por primera vvez en y
+     * @param pointer
+     * @param button
+     * @return
+     */
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
 
@@ -40,6 +47,14 @@ public class MyGestureListener implements GestureDetector.GestureListener {
         return false;
     }
 
+    /**
+     *
+     * @param x posiocion en la que esta tocando en x
+     * @param y posicion en la que esta tocando en y
+     * @param deltaX la diferencia en pixels del arrastre en x
+     * @param deltaY la diferencia en pixels del arrastre en y
+     * @return
+     */
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
 
@@ -73,9 +88,9 @@ public class MyGestureListener implements GestureDetector.GestureListener {
 
 
     /**
-     * hola javi :) no me suspendas :))))))
-     *
-     * @return
+     * Hace comprovaciones con el valor de x e y para saber cual es mayor y si son positivos
+     * y negativos para determinar en que direccion se va a mover
+     * @return un Valor del enumerado DIR que determina la direccion
      */
     public static Constantes.DIR direccion() {
 
@@ -103,13 +118,24 @@ public class MyGestureListener implements GestureDetector.GestureListener {
         return DIR.NO_DIRECTION;
     }
 
+    /**
+     *
+     * @param principio principio del drag
+     * @param fin fin del drag
+     * @return un numero con el valor del recorrido
+     */
     public static float comparar(float principio, float fin) {
 
         return fin - principio;
 
     }
 
-
+    /**
+     * Direcion en la que se va a mover si es en el eje x o en el y
+     * @param x comparacion del principio con el fin del movimiento en x
+     * @param y comparacion del principio con el fin del movimiento en y
+     * @return el valor mas alto entre x e y
+     */
     public static boolean direcionFinal(float x, float y) {
 
         return Math.abs(x) > Math.abs(y);

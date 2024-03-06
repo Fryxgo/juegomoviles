@@ -14,16 +14,39 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import Juego.moviles.Jueuito.MainClass;
-import Juego.moviles.Jueuito.UICreator;
+import Juego.moviles.Jueuito.UICrea;
 
 public class GameOver implements Screen {
 
+    /**
+     * camara
+     */
     private OrthographicCamera camera;
+    /**
+     * clase para la gestion de los strigns
+     */
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
+    /**
+     * stage
+     */
     Stage stage;
+    /**
+     * viewport
+     */
     Viewport v;
+    /**
+     * labelperder
+     */
     Label labelPerder;
+    /**
+     * clase principal
+     */
     MainClass mainclass;
+
+    /**
+     * Se inicializa lo que se ve en pantalla asi como la camara
+     * @param mainClass la clase principal
+     */
 
     public GameOver(final MainClass mainClass) {
 
@@ -38,7 +61,7 @@ public class GameOver implements Screen {
         v = new ExtendViewport(w / 2, h / 2, camera);
         stage = new Stage(v);
 
-        labelPerder = UICreator.createLabel(lang.get("end.died"), 60, Color.RED, new Vector2(Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 5), stage);
+        labelPerder = UICrea.createLabel(lang.get("end.died"), 60, Color.RED, new Vector2(Gdx.graphics.getWidth() / 6, Gdx.graphics.getHeight() / 5), stage);
 
     }
 
@@ -47,6 +70,10 @@ public class GameOver implements Screen {
 
     }
 
+    /**
+     * metodo de renderizado
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 
@@ -89,6 +116,9 @@ public class GameOver implements Screen {
 
     }
 
+    /**
+     * metodo de librerar memoria
+     */
     @Override
     public void dispose() {
         stage.dispose();

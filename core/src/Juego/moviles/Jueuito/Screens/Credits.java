@@ -2,6 +2,7 @@ package Juego.moviles.Jueuito.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -20,43 +22,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import Juego.moviles.Jueuito.MainClass;
 import Juego.moviles.Jueuito.UICrea;
 
-public class MainMenu implements Screen {
-    /**
-     * camara
-     */
+public class Credits implements Screen {
+
     private OrthographicCamera camera;
-    /**
-     * clase para la gestion de los strigns
-     */
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
-    /**
-     * stage
-     */
     Stage stage;
-    /**
-     * veiwport
-     */
     Viewport v;
-    /**
-     * botones de la clase
-     */
-    Button btnPlay, btnOptions, btnCreditos, btnAyuda;
-    /**
-     * clase principal
-     */
-    MainClass mainClass;
-    /**
-     * boolean pasa saber si utilizar el giroscopio(acelerometro) o no
-     */
-    public static boolean isGiroscopio = false;
+    Label lblsprites, lblmapa, lblmusica,lblfuente,lblayuda;
+    Button btnAtras;
+
+    Image fondo;
+    MainClass mainclass;
 
     /**
      * Costructor del menu, inicializa lo que se ve en pantalla
-     * @param mainClass
+     * @param mainclass
      */
-    public MainMenu(final MainClass mainClass) {
+    public Credits(final MainClass mainclass) {
+        this.mainclass = mainclass;
 
-        this.mainClass = mainClass;
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
@@ -68,26 +52,15 @@ public class MainMenu implements Screen {
 
         Skin skin = new Skin();
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
+        skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
-        Image fondo = UICrea.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
-        btnPlay = UICrea.createTextButton(lang.get("mainmenu.start"), 30, new Vector2(w / 5, h / 5+100), 250, 90, skin, "btnPlay", stage, 50);
-        btnPlay.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                Gdx.input.vibrate(100);
-                return true;
-            }
+        fondo = UICrea.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
+        lblsprites = UICrea.createLabel(lang.get("credit.sprite"),20,Color.BLACK,new Vector2(w/10,h/3),stage);
 
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                mainClass.setScreen(new MyGdxGame(mainClass));
-            }
+        btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(w / 3 + 250, h / 3 + 80), 100, 70, skin, "btnPlay", stage, 30);
 
-        });
-
-        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),30, new Vector2(w / 5+25, h / 8+50),200,90,skin,"btnPlay", stage, 50);
-        btnOptions.addListener(new InputListener(){
+        btnAtras.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -97,41 +70,28 @@ public class MainMenu implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
-                mainClass.setScreen(new Opciones(mainClass));
-
-            }
-
-
-        });
-
-        btnCreditos= UICrea.createTextButton(lang.get("mainmenu.creds"),30, new Vector2(w / 5-80, h / 8-100),200,90,skin,"btnPlay", stage, 50);
-        btnCreditos.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.input.vibrate(100);
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
-                mainClass.setScreen(new Credits(mainClass));
-
+                mainclass.setScreen(new MainMenu(mainclass));
             }
         });
-        btnAyuda= UICrea.createTextButton(lang.get("mainmenu.help"),30, new Vector2(w / 5+120, h / 8-100),200,90,skin,"btnPlay", stage, 50);
+
+        lblayuda = UICrea.createLabel(lang.get("credit.help"),20,Color.BLACK,new Vector2(w/10,h/3-40),stage);
+        lblfuente = UICrea.createLabel(lang.get("credit.font"),20,Color.BLACK,new Vector2(w/10,h/3-80),stage);
+        lblmusica = UICrea.createLabel(lang.get("credit.music"),20,Color.BLACK,new Vector2(w/10,h/3-120),stage);
+        lblmapa = UICrea.createLabel(lang.get("credit.map"),20,Color.BLACK,new Vector2(w/10,h/3-160),stage);
+
+
+
+
+
 
     }
-
 
     @Override
     public void show() {
-
     }
 
     /**
-     * funcion de renderizado
+     * metodo de renderizado
      * @param delta The time in seconds since the last render.
      */
     @Override
@@ -152,25 +112,20 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     /**
@@ -178,7 +133,7 @@ public class MainMenu implements Screen {
      */
     @Override
     public void dispose() {
-        this.dispose();
         stage.dispose();
+        this.dispose();
     }
 }

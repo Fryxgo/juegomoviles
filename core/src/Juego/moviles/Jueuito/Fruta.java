@@ -12,23 +12,40 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Fruta {
 
+    /**
+     * Cuerpo
+     */
     public Body body;
     public BodyDef def = new BodyDef();
+    /**
+     * Posicion en la que se encuentra actualemte el body
+     */
     private float posicionX, posicionY;
-
-    private Sprite sprite;
-    SpriteBatch batch;
-
+    /**
+     * Wold
+     */
     World world;
-    boolean isgomu;
     long tini;
+    /**
+     * boolean que indica si la fruta va a estar flotando o no
+     */
     boolean flota = false;
+    /**
+     * Textura de la fruta
+     */
+    Texture gomugomu;
 
-    public Fruta(float posicionX, float posicionY, World world, boolean isgomu) {
+    /**
+     * contructor que inicializa los parametros
+     * @param posicionX posicion donde se va a crear en x
+     * @param posicionY posicion donde se va a crear en y
+     * @param world wold
+     */
+
+    public Fruta(float posicionX, float posicionY, World world) {
         this.world = world;
         this.posicionX = posicionX;
         this.posicionY = posicionY;
-        this.isgomu = isgomu;
 
         crea();
     }
@@ -50,13 +67,14 @@ public class Fruta {
         this.posicionY = posicionY;
     }
 
-    Texture gomugomu, carne;
 
 
+    /**
+     * creacion del body y añadirlo al wold
+     */
     public void crea() {
 
         gomugomu = new Texture(Gdx.files.internal("Fruta/gomugomu.png"));
-        carne = new Texture(Gdx.files.internal("Fruta/carne.png"));
 
         def.position.set(posicionX, posicionY);
         def.fixedRotation = true;
@@ -74,6 +92,10 @@ public class Fruta {
 
     }
 
+    /**
+     * metodo para poder dibujar el sprite
+     * @param batch el Spritebatch
+     */
     public void draw(SpriteBatch batch) {
 
         if (System.currentTimeMillis() - tini > 500) {
@@ -93,6 +115,11 @@ public class Fruta {
 
     }
 
+
+    /**
+     * metodo para mover la furta de posicion
+     * @param vector2 nuevo lugar al que se transporta
+     */
     public void mover(Vector2 vector2) {
 
         setPosicionX(vector2.x);

@@ -7,6 +7,9 @@ import java.util.Vector;
 
 public class Constantes {
 
+    /**
+     * Enumerado con la direccion en vector de la serpiente
+     */
     public static enum DIR {
         RIGHT (new Vector2(32.05f, 0)),
         LEFT (new Vector2(-32.05f,0)),

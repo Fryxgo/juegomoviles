@@ -8,7 +8,7 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/cabeza"
+        android:icon="@drawable/ico"
         android:isGame="true"
         android:appCategory="game"
         android:label="@string/app_name"

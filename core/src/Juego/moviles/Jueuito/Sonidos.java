@@ -12,6 +12,10 @@ public class Sonidos{
         sound = Gdx.audio.newSound(Gdx.files.internal(path));
     }
 
+    /**
+     * Funcion para poder hacer el play del sonido
+     * @param loop si se repite o no el sonido
+     */
     public void play(boolean loop){
         long id = sound.play(volumen);
         sound.setLooping(id,loop);

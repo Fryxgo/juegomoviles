@@ -15,12 +15,23 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Serpiente {
 
 
+    /**
+     * Textura de la cabeza con la boca abierta
+     */
     Texture bocaabiertga = new Texture(Gdx.files.internal("Serpiente/bocaabierta.png"));
 
     long tini;
+    /**
+     * variable utilizada para hacer el cambio de sprite
+     */
     boolean flota = false;
+    /**
+     * posiociones de x e y actuales
+     */
     private float posicionX, posicionY;
-
+    /**
+     * posicion que tenia antes de moverse en x
+     */
     private float posicionAnteriorX;
 
     public float getPosicionAnteriorX() {
@@ -31,6 +42,10 @@ public class Serpiente {
         this.posicionAnteriorX = posicionAnteriorX;
     }
 
+    /**
+     * posicion que tenia antes de moverse en y
+     */
+    private float posicionAnteriorY;
     public float getPosicionAnteriorY() {
         return posicionAnteriorY;
     }
@@ -39,15 +54,33 @@ public class Serpiente {
         this.posicionAnteriorY = posicionAnteriorY;
     }
 
-    private float posicionAnteriorY;
+    /**
+     * alto y ancho del cuadrado de la hitbox
+     */
     float with, height;
+    /**
+     * El mundo
+     */
     World world;
-
+    /**
+     * booleana para saber si el body es la cabeza o no
+     */
     boolean isCabeza;
-
+    /**
+     * Cuerpo
+     */
     public Body body;
     public BodyDef def = new BodyDef();
 
+    /**
+     * constructor de Serpiente que inicializa los parametros
+     * @param with ancho de la hitbox
+     * @param height alto de la hitbox
+     * @param posicionX posicion donde se genera en x
+     * @param posicionY posicion donde se genera en x
+     * @param world El mundo donde se crea
+     * @param isCabeza boolean para saber si el opjeto es la cabeza o no
+     */
     public Serpiente(float with, float height, float posicionX, float posicionY, World world, boolean isCabeza) {
         setPosicionX(posicionX);
         setPosicionY(posicionY);
@@ -75,9 +108,10 @@ public class Serpiente {
         return posicionY;
     }
 
-
+    /**
+     * Crea el body todas las hitbox de la serpiente y las añade al world
+     */
     public void crea() {
-
 
         def.position.set(posicionX, posicionY);
         def.fixedRotation = true;
@@ -102,9 +136,13 @@ public class Serpiente {
 
     }
 
+    /**
+     *
+     * @param batch el bach para poder dibujar el sprite
+     * @param imagen la imagen a representar
+     * @param isCabeza boolean que indica si la imagen a pintar es la cabeza o no
+     */
     public void draw(SpriteBatch batch, Texture imagen, boolean isCabeza) {
-
-
 
         if (isCabeza) {
             if (System.currentTimeMillis() - tini > 500) {
@@ -130,7 +168,11 @@ public class Serpiente {
 
     }
 
-
+    /**
+     * Funcion para poder mover con SetTransform() cada una de las hitbox
+     * @param x posicion a la que se mueve en x
+     * @param y poscion a la que se mueve en y
+     */
     public void mover(float x, float y) {
 
 

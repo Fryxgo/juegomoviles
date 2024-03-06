@@ -21,13 +21,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import Juego.moviles.Jueuito.MainClass;
 import Juego.moviles.Jueuito.Sonidos;
-import Juego.moviles.Jueuito.UICreator;
+import Juego.moviles.Jueuito.UICrea;
 
 
 public class Opciones implements Screen {
 
 
+    /**
+     * camara
+     */
     private OrthographicCamera camera;
+    /**
+     * clase para la gestion de los strigns
+     */
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
     Stage stage;
     Viewport v;
@@ -37,12 +43,20 @@ public class Opciones implements Screen {
     MyGdxGame juego;
 
 
+    /**
+     * sobrecarga del constructor
+     * @param juego screen del juego
+     */
     public Opciones(MyGdxGame juego) {
         this.juego = juego;
         mainClass = juego.mainclass;
         init();
     }
 
+    /**
+     * sobrecarga del contructor
+     * @param mainClass clase pirncipal
+     */
     public Opciones(final MainClass mainClass) {
         this.mainClass = mainClass;
 
@@ -50,6 +64,10 @@ public class Opciones implements Screen {
 
     }
 
+    /**
+     * Funcion que inicializa llamada desde los constructores que crea lo que se ve
+     * con esta screen
+     */
     public void init() {
 
         float w = Gdx.graphics.getWidth();
@@ -66,8 +84,8 @@ public class Opciones implements Screen {
         skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
 
-        Image fondo = UICreator.createImage(new Vector2(0, 0), w / 2, h / 2, skin, "Fondo", stage);
-        btnAtras = UICreator.createTextButton(lang.get("setting.back"), 25, new Vector2(w / 3 + 250, h / 3 + 80), 100, 70, skin, "btnPlay", stage, 30);
+        Image fondo = UICrea.createImage(new Vector2(0, 0), w / 2, h / 2, skin, "Fondo", stage);
+        btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(w / 3 + 250, h / 3 + 80), 100, 70, skin, "btnPlay", stage, 30);
 
         btnAtras.addListener(new InputListener() {
 
@@ -89,9 +107,9 @@ public class Opciones implements Screen {
 
         });
 
-        lblGiroscopio = UICreator.createLabel("", 30, Color.BLACK, new Vector2(w / 5 + 120, h / 7 + 20), stage);
+        lblGiroscopio = UICrea.createLabel("", 30, Color.BLACK, new Vector2(w / 5 + 120, h / 7 + 20), stage);
         lblGiroscopio.setColor(Color.WHITE);
-        btnGiroscopio = UICreator.createTextButton(lang.get("settings.gyro"), 30, new Vector2(w / 4, h / 7 - 100), 200, 80, skin, "btnPlay", stage, 40);
+        btnGiroscopio = UICrea.createTextButton(lang.get("settings.gyro"), 30, new Vector2(w / 4, h / 7 - 100), 200, 80, skin, "btnPlay", stage, 40);
         btnGiroscopio.addListener(new InputListener() {
 
             @Override
@@ -108,7 +126,7 @@ public class Opciones implements Screen {
 
         });
 
-        btnMainMenu = UICreator.createTextButton(lang.get("setting.menu"), 25, new Vector2(w / 3 + 250, h / 3), 100, 70, skin, "btnPlay", stage, 35);
+        btnMainMenu = UICrea.createTextButton(lang.get("setting.menu"), 25, new Vector2(w / 3 + 250, h / 3), 100, 70, skin, "btnPlay", stage, 35);
         btnMainMenu.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -126,10 +144,10 @@ public class Opciones implements Screen {
         });
 
 
-        lblVol = UICreator.createLabel("", 40, Color.BLACK, new Vector2(w / 7, h / 7 - 50), stage);
-        lblVolumen = UICreator.createLabel(lang.get("settings.volume"), 35, Color.BLACK, new Vector2(w / 7 - 55, h / 7), stage);
-        btnVolumenUp = UICreator.createTextButton("+", 40, new Vector2(w / 7 + 70, h / 7 - 100), 80, 80, skin, "btnPeque", stage, 30);
-        btnVolumenDown = UICreator.createTextButton("-", 40, new Vector2(w / 8 - 80, h / 7 - 100), 80, 80, skin, "btnPeque", stage, 30);
+        lblVol = UICrea.createLabel("", 40, Color.BLACK, new Vector2(w / 7, h / 7 - 50), stage);
+        lblVolumen = UICrea.createLabel(lang.get("settings.volume"), 35, Color.BLACK, new Vector2(w / 7 - 55, h / 7), stage);
+        btnVolumenUp = UICrea.createTextButton("+", 40, new Vector2(w / 7 + 70, h / 7 - 100), 80, 80, skin, "btnPeque", stage, 30);
+        btnVolumenDown = UICrea.createTextButton("-", 40, new Vector2(w / 8 - 80, h / 7 - 100), 80, 80, skin, "btnPeque", stage, 30);
 
         btnVolumenUp.addListener(new InputListener() {
             @Override
@@ -173,6 +191,10 @@ public class Opciones implements Screen {
 
     }
 
+    /**
+     * Metodo de renderizado
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 
@@ -220,6 +242,9 @@ public class Opciones implements Screen {
 
     }
 
+    /**
+     * metodo para liberar memoria
+     */
     @Override
     public void dispose() {
         stage.dispose();

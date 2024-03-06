@@ -1,7 +1,6 @@
 package Juego.moviles.Jueuito.Screens;
 
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -26,7 +24,6 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -35,19 +32,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.sql.Time;
-import java.text.Format;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Vector;
-
-import javax.swing.DebugGraphics;
 
 import Juego.moviles.Jueuito.Constantes.DIR;
 import Juego.moviles.Jueuito.Fruta;
@@ -56,40 +45,120 @@ import Juego.moviles.Jueuito.Mapa;
 import Juego.moviles.Jueuito.MyGestureListener;
 import Juego.moviles.Jueuito.Serpiente;
 import Juego.moviles.Jueuito.Sonidos;
-import Juego.moviles.Jueuito.UICreator;
+import Juego.moviles.Jueuito.UICrea;
 
 public class MyGdxGame implements Screen {
 
+    /**
+     * camara
+     */
     private OrthographicCamera camera;
+    /**
+     * camara del Mapa
+     */
     private OrthogonalTiledMapRenderer tmr;
+    /**
+     * rederizado de las hitbox
+     */
     private Box2DDebugRenderer b2dr;
+    /**
+     * Wold donde se juega
+     */
     private World world;
     Serpiente player, cuerpo;
+    /**
+     * booleana que indica si la serpiente se puede mover o no
+     */
     boolean movimiento = true;
+    /**
+     *
+     */
     long tini = 0;
-    float x, y, creaX, creaY;
-    ArrayList<Serpiente> cuerpos = new ArrayList<>(3);
+    /**
+     * Variables para la saber donde crear el nuevo cuerpo
+     */
+    float creaX, creaY;
+    /**
+     * Lista que contiene todos los cuerpos de la serpiente
+     */
+    ArrayList<Serpiente> cuerpos = new ArrayList<>();
+    /**
+     * booleana que indica si se ha chocado
+     */
     boolean hit = false;
+    /**
+     * variables para conrolar la direccion
+     */
     DIR direccion = DIR.NO_DIRECTION, direccionFinal = DIR.LEFT, direccionAnterior = DIR.NO_DIRECTION;
-    Fruta fruta;
+    /**
+     * stage
+     */
+    Stage stage;
+    /**
+     * viewport
+     */
+    Viewport v;
+    /**
+     * variables booleanas para cuando crear un nuevo cuerpo de la serpiente  y para saber cuando la serpiete ha chocado
+     * para gestionar el movimiento
+     */
     boolean crear = false, colision = true;
     Mapa mapa;
-    Texture imagenCabeza;
-    Texture imagenCuerpo;
-    Stage stage;
-    Viewport v;
+    /**
+     * texturas de la serpiente
+     */
+    Texture imagenCabeza, imagenCuerpo;
+    /**
+     * Labels de la puntuacion el tiempo y Record
+     */
     Label labelPuntuacion, labelTiempo, labelRecord;
+    /**
+     * clase para la gestion de los strigns
+     */
     private I18NBundle lang;
+    /**
+     * variable de la fruta del juego
+     */
+    Fruta fruta;
     long time, segundos;
-    long minutos = 0;
+    /**
+     * clase donde se ejecuta la screen
+     */
     MainClass mainclass;
-    int records;
+    /**
+     * El archivo preference donde se guarda el record
+     */
     Preferences record = Gdx.app.getPreferences("Records");
+    /**
+     * booleana pasa saber si el juego esta en pausa o no
+     */
     boolean pause = false;
-
+    /**
+     * tamaño con el que se inicia la serpiente
+     */
+    int tamInicial = 3;
+    /**
+     * variable de la propia clase para poder enviarla en un evento
+     */
     MyGdxGame juego = this;
+    /**
+     * clase sonidos, para gestionar los sonidos que quieras
+     */
     Sonidos sonidos;
 
+    /**
+     * Boton de opciones y de puase
+     */
+    Button btnOptions, btn;
+    /**
+     * referencia al fondo de pantalla
+     */
+    Image fondo;
+
+    /**
+     * contructor de la Screen del juego crea e inicializa lo que se ve en pantalla
+     * @param mainclass Clase main en donde se ejecutan las screen
+     */
     public MyGdxGame(final MainClass mainclass) {
 
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
@@ -114,9 +183,9 @@ public class MyGdxGame implements Screen {
         skin.add("btnPause", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
-        Image fondo = UICreator.createImage(new Vector2(0,0), x /2,y/2,skin,"Fondo",stage);
+        fondo = UICrea.createImage(new Vector2(0,0), x /2,y/2,skin,"Fondo",stage);
 
-        Button btn = UICreator.createTextButton("Pause", 15, new Vector2(x / 2 - 150, y / 6 + 30), 75, 60, skin, "btnPause", stage, 20);
+        btn = UICrea.createTextButton("Pause", 15, new Vector2(x / 2 - 150, y / 6 + 30), 75, 60, skin, "btnPause", stage, 20);
         TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
         tmr = new OrthogonalTiledMapRenderer(tiledMap);
         mapa = new Mapa(world, tiledMap.getLayers().get("Colisiones").getObjects());
@@ -124,28 +193,30 @@ public class MyGdxGame implements Screen {
         player = new Serpiente(32, 32, 525, 225, world, false);
         cuerpos.add(player);
 
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < tamInicial; i++) {
             cuerpos.add(new Serpiente(32, 32, cuerpos.get(i - 1).getPosicionX() + 33, cuerpos.get(i - 1).getPosicionY(), world, true));
         }
 
-        fruta = new Fruta(250, 225, world, false);
+        fruta = new Fruta(250, 225, world);
 
         time = System.currentTimeMillis();
 
 
-        UICreator.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 + 100), stage);
-        labelPuntuacion = UICreator.createLabel("0", 30, Color.WHITE, new Vector2(x / 3 + 255, y / 3 + 70), stage);
-        labelTiempo = UICreator.createLabel("", 30, Color.WHITE, new Vector2(x / 3 + 230, y / 3 + 30), stage);
+        UICrea.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 + 100), stage);
+        labelPuntuacion = UICrea.createLabel("0", 30, Color.WHITE, new Vector2(x / 3 + 255, y / 3 + 70), stage);
+        labelTiempo = UICrea.createLabel("", 30, Color.WHITE, new Vector2(x / 3 + 230, y / 3 + 30), stage);
 
 
-        labelRecord = UICreator.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 - 30), stage);
+        labelRecord = UICrea.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 - 30), stage);
 
+        /**
+         * Listener del boton pause
+         */
         btn.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.input.vibrate(100);
-
                 return true;
             }
 
@@ -160,12 +231,15 @@ public class MyGdxGame implements Screen {
             }
         });
 
-        Button btnOptions = UICreator.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(x / 3+220, y / 9),120,60,skin,"btnPlay", stage, 30);
+
+        /**
+         * Listener del boton opciones
+         */
+        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(x / 3+220, y / 9),120,60,skin,"btnPlay", stage, 30);
         btnOptions.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
                 Gdx.input.vibrate(100);
                 return true;
             }
@@ -174,10 +248,7 @@ public class MyGdxGame implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
                 mainclass.setScreen(new Opciones(juego));
-
             }
-
-
         });
 
         sonidos = new Sonidos("Sonidos/comer.mp3");
@@ -193,7 +264,6 @@ public class MyGdxGame implements Screen {
         update(Gdx.graphics.getDeltaTime());
         SpriteBatch batch = new SpriteBatch();
 
-
         stage.getCamera().update();
         stage.getViewport().apply();
         stage.act(Gdx.graphics.getDeltaTime());
@@ -201,11 +271,8 @@ public class MyGdxGame implements Screen {
 
         tmr.render();
         labelPuntuacion.setText((cuerpos.size() - 3) * 10 + "");
-
         segundos = (System.currentTimeMillis() - time) / 1000;
-
         labelTiempo.setText(String.format("%02.0f : %02.0f", (float) (segundos / 60), (float) (segundos % 60)));
-
 
         batch.begin();
         cuerpos.get(0).draw(batch, imagenCabeza, true);
@@ -213,7 +280,6 @@ public class MyGdxGame implements Screen {
 
             cuerpos.get(i).draw(batch, imagenCuerpo, false);
         }
-
         fruta.draw(batch);
         batch.end();
         batch.dispose();
@@ -227,15 +293,11 @@ public class MyGdxGame implements Screen {
         b2dr.render(world, camera.combined);
         b2dr.setDrawBodies(false);
 
-
-
     }
-
     @Override
     public void show() {
 
     }
-
 
     @Override
     public void resize(int width, int height) {
@@ -258,6 +320,9 @@ public class MyGdxGame implements Screen {
 
     }
 
+    /**
+     * metodo para hacer dispos
+     */
     @Override
     public void dispose() {
         world.dispose();
@@ -265,9 +330,13 @@ public class MyGdxGame implements Screen {
         this.dispose();
     }
 
+    /**
+     * metodo para actualizar la camra y el mapa
+     * @param delta
+     */
     public void update(float delta) {
         world.step(1 / 60f, 6, 2);
-        cameraUpdate(delta);
+        cameraUpdate();
 
         tmr.setView(camera);
         tmr.render();
@@ -280,10 +349,16 @@ public class MyGdxGame implements Screen {
 
     }
 
-
+    /**
+     * Funcion para detectar colisiones de cabeza y cuerpo, o cabeza y fruta
+     */
     public void hitContact() {
 
         world.setContactListener(new ContactListener() {
+            /**
+             * indica el principio del contacto
+             * @param contact el contacto de 2 hitbox
+             */
             @Override
             public void beginContact(Contact contact) {
 
@@ -310,6 +385,10 @@ public class MyGdxGame implements Screen {
                 }
             }
 
+            /**
+             *  indica el final del contacto
+             * @param contact el contacto de 2 hitbox
+             */
             @Override
             public void endContact(Contact contact) {
 
@@ -328,7 +407,12 @@ public class MyGdxGame implements Screen {
         });
     }
 
-
+    /**
+     * Funcion para hacer el moviemto de la serpiente, por gestos(!IsGiroscopio) o no
+     * con cada uno de los miviemntos tambien llama a la funcion para comprbar colisiones
+     * y la funcion que comprueba la cabeza
+     * @param tick intervalo de tiempo para hacer cada movimiento
+     */
     public void setMovimiento(float tick) {
 
         if (!hit && !pause) {
@@ -357,29 +441,17 @@ public class MyGdxGame implements Screen {
                 }
             }
 
-
             if (System.currentTimeMillis() - tini > tick) {
                 movimiento = true;
 
                 hitContact();
-
                 compruebaCabeza();
-
                 if (crear) {
-                    //  Mover la fruta, a la cual se le pasa un vector con la (X) y la (Y) a la que moverse
                     fruta.mover(posicionFruta());
-
-                    // Añade cuerpo al array
-
                     creaCuerpo();
-
                     crear = false;
-
                 }
-
-
                 cuerpos.get(0).mover(player.getPosicionX() + direccionFinal.vector2.x, player.getPosicionY() + direccionFinal.vector2.y);
-
                 for (int i = 1; i < cuerpos.size(); i++) {
 
                     cuerpos.get(i).mover(cuerpos.get(i - 1).getPosicionAnteriorX(), cuerpos.get(i - 1).getPosicionAnteriorY());
@@ -393,6 +465,11 @@ public class MyGdxGame implements Screen {
 
     }
 
+    /**
+     * Comprobacion del movimiento siguente
+     * Detecta si el movimiento que esta siguiendo y el movimiento que le llega son contrarios
+     * @return si los movimientos son contrarios devuelve false si no true
+     */
     public boolean compruebaDireccion() {
 
         if (direccion != DIR.NO_DIRECTION) {
@@ -400,10 +477,7 @@ public class MyGdxGame implements Screen {
                 if (!(direccionAnterior == DIR.UP && direccion == DIR.DOWN)) {
                     if (!(direccionAnterior == DIR.LEFT && direccion == DIR.RIGHT)) {
                         if (!(direccionAnterior == DIR.RIGHT && direccion == DIR.LEFT)) {
-
-
                             return true;
-
                         }
                     }
                 }
@@ -414,6 +488,12 @@ public class MyGdxGame implements Screen {
     }
 
 
+    /**
+     * Funcion que derecta la inclicacion del telefono(con el Acelerometro)
+     * y genera una direccion para el movimiento de la serpiente segun la inclinacion la cual
+     * tiene que ser mayor que 5 (la mitad de un eje)
+     * @return devuelve un Enumerado DIR con la direccion
+     */
     public DIR DireccionAcelerometro() {
 
         DIR giro = DIR.NO_DIRECTION;
@@ -438,6 +518,10 @@ public class MyGdxGame implements Screen {
 
     }
 
+    /**
+     * Esta funcion comprueba los limites de la pantalla, para cuando la cabeza de la serpiente llega
+     * a cualquiera de esos 4 limites (arriba, abajo, izquierda, derecha), la envia al limite contrario
+     */
     public void compruebaCabeza() {
         Serpiente cabeza = cuerpos.get(0);
 
@@ -470,9 +554,7 @@ public class MyGdxGame implements Screen {
         Vector2 vector2 = new Vector2();
         float x;
         float y;
-
         do {
-
             x = (float) (Math.random() * 870) + 35;
             y = (float) (Math.random() * 480) + 35;
 
@@ -481,7 +563,12 @@ public class MyGdxGame implements Screen {
         return new Vector2(x, y);
     }
 
-
+    /**
+     * Crea un rectangulo con los 2 parametros y comprueba si se genera encima de cualquier parte de la serpiente
+     * @param posiX Posicion x donde se genera el cuadrado
+     * @param posiY Posicion y donde se genera el cuadrado
+     * @return true si se genera encima, false si no
+     */
     public boolean comprueba(float posiX, float posiY) {
 
         float Serx;
@@ -536,7 +623,10 @@ public class MyGdxGame implements Screen {
     }
 
 
-    public void cameraUpdate(float delta) {
+    /**
+     * Actualizacion de la camara
+     */
+    public void cameraUpdate() {
         Vector3 position = camera.position;
         camera.position.set(position);
         camera.update();
