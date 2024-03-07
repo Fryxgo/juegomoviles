@@ -24,17 +24,44 @@ import Juego.moviles.Jueuito.UICrea;
 
 public class Help implements Screen {
 
+    /**
+     * camara
+     */
     private OrthographicCamera camera;
+    /**
+     * clase para la gestion de los strigns
+     */
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
+    /**
+     * stage
+     */
     Stage stage;
+    /**
+     * viewport
+     */
     Viewport v;
+    /**
+     * imagen de fondo
+     */
     Image fondo;
+    /**
+     * clase principal
+     */
     MainClass mainClass;
+    /**
+     * labels de textp
+     */
     Label lblMano, lblExplicacion;
-
+    /**
+     * boton volver
+     */
     Button btnAtras;
 
 
+    /**
+     * Costructor del menu, inicializa lo que se ve en pantalla
+     * @param mainClass
+     */
     public Help(final MainClass mainClass) {
         this.mainClass = mainClass;
 
@@ -81,6 +108,10 @@ public class Help implements Screen {
 
     }
 
+    /**
+     * metodo para renderizado
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 
@@ -119,8 +150,12 @@ public class Help implements Screen {
 
     }
 
+    /**
+     * metodo para liberar memoria
+     */
     @Override
     public void dispose() {
-
+        stage.dispose();
+        this.dispose();
     }
 }

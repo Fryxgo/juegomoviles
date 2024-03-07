@@ -24,14 +24,39 @@ import Juego.moviles.Jueuito.UICrea;
 
 public class Credits implements Screen {
 
+
+    /**
+     * camara
+     */
     private OrthographicCamera camera;
+    /**
+     * clase para la gestion de los strigns
+     */
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
+    /**
+     * stage
+     */
     Stage stage;
+    /**
+     * viewport
+     */
     Viewport v;
-    Label lblsprites, lblmapa, lblmusica,lblfuente,lblayuda;
+    /**
+     * label para los creditos
+     */
+    Label lblayuda;
+    /**
+     * boton para volver
+     */
     Button btnAtras;
 
+    /**
+     * imagen de fondo
+     */
     Image fondo;
+    /**
+     * clase principal
+     */
     MainClass mainclass;
 
     /**
@@ -56,7 +81,6 @@ public class Credits implements Screen {
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
 
         fondo = UICrea.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
-        lblsprites = UICrea.createLabel(lang.get("credit.sprite"),20,Color.BLACK,new Vector2(w/10,h/3),stage);
 
         btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(w / 3 + 250, h / 3 + 80), 100, 70, skin, "btnPlay", stage, 30);
 
@@ -74,15 +98,7 @@ public class Credits implements Screen {
             }
         });
 
-        lblayuda = UICrea.createLabel(lang.get("credit.help"),20,Color.BLACK,new Vector2(w/10,h/3-40),stage);
-        lblfuente = UICrea.createLabel(lang.get("credit.font"),20,Color.BLACK,new Vector2(w/10,h/3-80),stage);
-        lblmusica = UICrea.createLabel(lang.get("credit.music"),20,Color.BLACK,new Vector2(w/10,h/3-120),stage);
-        lblmapa = UICrea.createLabel(lang.get("credit.map"),20,Color.BLACK,new Vector2(w/10,h/3-160),stage);
-
-
-
-
-
+        lblayuda = UICrea.createLabel(lang.get("credit.help"),20,Color.BLACK,new Vector2(w/10,h/5),stage);
 
     }
 
