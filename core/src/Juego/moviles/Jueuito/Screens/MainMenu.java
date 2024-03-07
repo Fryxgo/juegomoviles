@@ -51,6 +51,11 @@ public class MainMenu implements Screen {
     public static boolean isGiroscopio = false;
 
     /**
+     * skin
+     */
+    Skin skin = new Skin();
+
+    /**
      * Costructor del menu, inicializa lo que se ve en pantalla
      * @param mainClass
      */
@@ -66,7 +71,7 @@ public class MainMenu implements Screen {
         v = new ExtendViewport(w / 2, h / 2, camera);
         stage = new Stage(v);
 
-        Skin skin = new Skin();
+
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
         Image fondo = UICrea.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
@@ -184,7 +189,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     /**
@@ -192,7 +197,7 @@ public class MainMenu implements Screen {
      */
     @Override
     public void dispose() {
-        this.dispose();
         stage.dispose();
+        skin.dispose();
     }
 }

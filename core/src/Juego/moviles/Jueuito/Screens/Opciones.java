@@ -35,12 +35,32 @@ public class Opciones implements Screen {
      * clase para la gestion de los strigns
      */
     I18NBundle lang = I18NBundle.createBundle(Gdx.files.internal("Locale/Locale"));
+    /**
+     * stage
+     */
     Stage stage;
+    /**
+     * viewport
+     */
     Viewport v;
+    /**
+     * buttons
+     */
     Button btnGiroscopio, btnAtras, btnVolumenUp, btnVolumenDown, btnMainMenu;
+    /**
+     * labels
+     */
     Label lblGiroscopio, lblVol, lblVolumen;
+    /**
+     * clase principal
+     */
     MainClass mainClass;
     MyGdxGame juego;
+
+    /**
+     * skin
+     */
+    Skin skin = new Skin();
 
 
     /**
@@ -79,7 +99,6 @@ public class Opciones implements Screen {
         v = new ExtendViewport(w / 2, h / 2, camera);
         stage = new Stage(v);
 
-        Skin skin = new Skin();
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
@@ -239,7 +258,7 @@ public class Opciones implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     /**
@@ -248,6 +267,6 @@ public class Opciones implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        this.dispose();
+        skin.dispose();
     }
 }

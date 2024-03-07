@@ -1,0 +1,14 @@
+16/01 empiezo creado el proyecto sin saber que hacer
+18/01 creo un cuadrado y un rectangulo con box2d ambos con hitbox y le doy al cuadrado una velocidad lineal
+25/01 creo el movimiento mediante el drag con el dedo para hacer el  movimiento de la serpiente
+27/01 le cambio la velocidad lineal por "ticks" para asi hacer que los demas objetos sigan a la cabeza
+y hacer el movimiento ya de una serpiente, hago que cada uno de los objetos se posicione en la posicion que tenia
+el anterior obejto para hacer el moviento hacia delante
+13/02 creo el mapa con hitbox con una app llamada Tiled y lo agrego
+17/02 empiezo a poner los sprites de la serpiente y me doy cuenta de que sigue una escala diferente a la de las hitbox y es un rollo hacer que funcionen como quiero
+22/02 quito las hitbox del mapa y hago que la serpiente si "choca" con u n bode se teletansporte al otro ya que las hitbox no van, ni se posicionan como yo quiero
+26/02 empiezo a crear la interfaz de usuario, es decir los menus, hago el de iniciar el juego
+28/02 sigo creando menus y hago que la serpiente tenga una animacion de abrir y cerar la boca, y la frutga de subir y bajar como si flotase
+3/03 pongo imagenes y musica al juego y hago casi todos los menus que quiero
+5/03 "termino" lo  que es la parte visual y el gameplay del juego, esta practicamente para entregar
+6/03 corrijo la imagen de fondo y comento el codigo para la entrega

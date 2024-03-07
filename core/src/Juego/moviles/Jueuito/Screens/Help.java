@@ -57,6 +57,11 @@ public class Help implements Screen {
      */
     Button btnAtras;
 
+    /**
+     * skin
+     */
+    Skin skin = new Skin();
+
 
     /**
      * Costructor del menu, inicializa lo que se ve en pantalla
@@ -74,7 +79,7 @@ public class Help implements Screen {
         v = new ExtendViewport(w / 2, h / 2, camera);
         stage = new Stage(v);
 
-        Skin skin = new Skin();
+
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/fondoayuda.png")));
@@ -147,7 +152,7 @@ public class Help implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     /**
@@ -156,6 +161,5 @@ public class Help implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        this.dispose();
     }
 }

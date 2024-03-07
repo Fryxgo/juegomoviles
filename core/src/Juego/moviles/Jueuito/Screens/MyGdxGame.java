@@ -327,7 +327,6 @@ public class MyGdxGame implements Screen {
     public void dispose() {
         world.dispose();
         b2dr.dispose();
-        this.dispose();
     }
 
     /**

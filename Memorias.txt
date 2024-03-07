@@ -1,6 +1,0 @@
-Memorias
-Al principio no me atraia para nada la idea, no sabia ni por donde empezar, me vi un video sobre box2d y a partir de ahi fui para adelante con lo ahi explicado, explicaba como crear un mundo, como crear un body, las texturas, y como darle movimiento al body. con eso me dispuse a crear el drag para hacer el movimineto de mi serpiente, algo que me frustro bastante por que nada parecia ir como deberia, hasta que lo puso en un clase a parte y use una forma diferente para detectar el punto inicial y el final, y me empezo a funcionar como yo queria, lo que me alegro un monton.
-
-Este problema recien nombrado me estaba motivando un monton para hacer el juego, y a partir de ahi me gustaba bastante ponerme con la mecanica del juego, que si hacer que la fruta no aparezca encima, que si hacer el movimineto de toda la cola de la serpiente sin que los bodys choquen entre si.
-
-En general ha sido una experiencia que me ha gustado bastante, mu cho mas de lo que me esperaba en un primer momento al empezar con esto, ademas me ha gustado, si, he pedido ayud, pero no saque practicamente nada de videos de internet o de chatgpt, todo de ayuda o de foros, o de la guia del propio libgdx, asi que sentir que lo estaba haciendo yo era aun mejor 

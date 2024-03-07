@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import Juego.moviles.Jueuito.MainClass;
 import Juego.moviles.Jueuito.UICrea;
 
-public class Credits implements Screen {
+public class  Credits implements Screen {
 
 
     /**
@@ -58,6 +58,10 @@ public class Credits implements Screen {
      * clase principal
      */
     MainClass mainclass;
+    /**
+     * skin
+     */
+    Skin skin = new Skin();
 
     /**
      * Costructor del menu, inicializa lo que se ve en pantalla
@@ -75,7 +79,7 @@ public class Credits implements Screen {
         v = new ExtendViewport(w / 2, h / 2, camera);
         stage = new Stage(v);
 
-        Skin skin = new Skin();
+
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
@@ -98,7 +102,7 @@ public class Credits implements Screen {
             }
         });
 
-        lblayuda = UICrea.createLabel(lang.get("credit.help"),20,Color.BLACK,new Vector2(w/10,h/5),stage);
+        lblayuda = UICrea.createLabel(lang.get("credit.help"),30,Color.BLACK,new Vector2(w/10,h/5-50),stage);
 
     }
 
@@ -142,6 +146,7 @@ public class Credits implements Screen {
 
     @Override
     public void hide() {
+        dispose();
     }
 
     /**
@@ -150,6 +155,6 @@ public class Credits implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        this.dispose();
+        skin.dispose();
     }
 }
