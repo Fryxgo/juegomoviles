@@ -236,7 +236,7 @@ public class MyGdxGame implements Screen {
         /**
          * Listener del boton opciones
          */
-        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(WORLD_WIDTH*0.82f, WORLD_HEIGHT*0.2f),120,60,skin,"btnPlay", stage, 30);
+        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(WORLD_WIDTH*0.83f, WORLD_HEIGHT*0.2f),120,60,skin,"btnPlay", stage, 30);
         btnOptions.addListener(new InputListener(){
 
             @Override

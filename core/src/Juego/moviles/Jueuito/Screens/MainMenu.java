@@ -1,5 +1,8 @@
 package Juego.moviles.Jueuito.Screens;
 
+import static Juego.moviles.Jueuito.Constantes.WORLD_HEIGHT;
+import static Juego.moviles.Jueuito.Constantes.WORLD_WIDTH;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -66,16 +69,16 @@ public class MainMenu implements Screen {
         float h = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w / 2, h / 2);
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
 
-        v = new ExtendViewport(w / 2, h / 2, camera);
+        v = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(v);
 
 
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
-        Image fondo = UICrea.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
-        btnPlay = UICrea.createTextButton(lang.get("mainmenu.start"), 30, new Vector2(w / 5, h / 5+100), 250, 90, skin, "btnPlay", stage, 50);
+        Image fondo = UICrea.createImage(new Vector2(0,0),WORLD_WIDTH, WORLD_HEIGHT,skin,"Fondo",stage);
+        btnPlay = UICrea.createTextButton(lang.get("mainmenu.start"), 30, new Vector2(WORLD_WIDTH*0.38f,  WORLD_HEIGHT*0.6f), 250, 90, skin, "btnPlay", stage, 50);
         btnPlay.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -91,7 +94,7 @@ public class MainMenu implements Screen {
 
         });
 
-        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),30, new Vector2(w / 5+25, h / 8+50),200,90,skin,"btnPlay", stage, 50);
+        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),30, new Vector2(WORLD_WIDTH*0.40f,  WORLD_HEIGHT*0.35f),200,90,skin,"btnPlay", stage, 50);
         btnOptions.addListener(new InputListener(){
 
             @Override
@@ -110,7 +113,7 @@ public class MainMenu implements Screen {
 
         });
 
-        btnCreditos= UICrea.createTextButton(lang.get("mainmenu.creds"),30, new Vector2(w / 5-80, h / 8-100),200,90,skin,"btnPlay", stage, 50);
+        btnCreditos= UICrea.createTextButton(lang.get("mainmenu.creds"),30, new Vector2(WORLD_WIDTH*0.50f,  WORLD_HEIGHT*0.13f),200,90,skin,"btnPlay", stage, 50);
         btnCreditos.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -125,7 +128,7 @@ public class MainMenu implements Screen {
 
             }
         });
-        btnAyuda= UICrea.createTextButton(lang.get("mainmenu.help"),30, new Vector2(w / 5+120, h / 8-100),200,90,skin,"btnPlay", stage, 50);
+        btnAyuda= UICrea.createTextButton(lang.get("mainmenu.help"),30, new Vector2(WORLD_WIDTH*0.30f,  WORLD_HEIGHT*0.13f),200,90,skin,"btnPlay", stage, 50);
 
         btnAyuda.addListener(new InputListener(){
 

@@ -1,5 +1,8 @@
 package Juego.moviles.Jueuito.Screens;
 
+import static Juego.moviles.Jueuito.Constantes.WORLD_HEIGHT;
+import static Juego.moviles.Jueuito.Constantes.WORLD_WIDTH;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -70,13 +73,11 @@ public class  Credits implements Screen {
     public Credits(final MainClass mainclass) {
         this.mainclass = mainclass;
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w / 2, h / 2);
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
 
-        v = new ExtendViewport(w / 2, h / 2, camera);
+        v = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(v);
 
 
@@ -84,9 +85,9 @@ public class  Credits implements Screen {
         skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
 
-        fondo = UICrea.createImage(new Vector2(0,0),w/2,h/2,skin,"Fondo",stage);
+        fondo = UICrea.createImage(new Vector2(0,0),WORLD_WIDTH, WORLD_HEIGHT,skin,"Fondo",stage);
 
-        btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(w / 3 + 250, h / 3 + 80), 100, 70, skin, "btnPlay", stage, 30);
+        btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(WORLD_WIDTH*0.9f, WORLD_HEIGHT*0.8f), 100, 70, skin, "btnPlay", stage, 30);
 
         btnAtras.addListener(new InputListener() {
 
@@ -102,7 +103,7 @@ public class  Credits implements Screen {
             }
         });
 
-        lblayuda = UICrea.createLabel(lang.get("credit.help"),30,Color.BLACK,new Vector2(w/10,h/5-50),stage);
+        lblayuda = UICrea.createLabel(lang.get("credit.help"),30,Color.BLACK,new Vector2(WORLD_WIDTH*0.1f, WORLD_HEIGHT*0.3f),stage);
 
     }
 
