@@ -31,10 +31,10 @@ android {
         }
     }
 }
-
-dependencies {
-    implementation fileTree(dir: 'C:\\Users\\Frigo\\AppData\\Local\\Android\\Sdk\\platforms\\android-33', include: ['*.aar', '*.jar'], exclude: [])
-}
+//
+//dependencies {
+//    implementation fileTree(dir: 'C:\\Users\\Frigo\\AppData\\Local\\Android\\Sdk\\platforms\\android-33', include: ['*.aar', '*.jar'], exclude: [])
+//}
 
 
 // called every time gradle gets executed, takes the native dependencies of

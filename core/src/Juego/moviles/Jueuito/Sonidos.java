@@ -17,7 +17,7 @@ public class Sonidos{
      * @param loop si se repite o no el sonido
      */
     public void play(boolean loop){
-        long id = sound.play(volumen);
+        long id = sound.play(volumen+0.1f);
         sound.setLooping(id,loop);
     }
 }

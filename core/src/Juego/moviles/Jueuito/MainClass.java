@@ -21,7 +21,7 @@ public class MainClass extends Game {
     public void create() {
         setScreen(new MainMenu(this));
         music = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/song.mp3"));
-        music.setVolume(Sonidos.volumen);
+        music.setVolume(Sonidos.volumen-0.2f);
         music.setLooping(true);
         music.play();
     }

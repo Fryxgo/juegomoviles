@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import static Juego.moviles.Jueuito.Constantes.*;
+
 import Juego.moviles.Jueuito.MainClass;
 import Juego.moviles.Jueuito.Sonidos;
 import Juego.moviles.Jueuito.UICrea;
@@ -65,6 +67,7 @@ public class Opciones implements Screen {
 
     /**
      * sobrecarga del constructor
+     *
      * @param juego screen del juego
      */
     public Opciones(MyGdxGame juego) {
@@ -75,6 +78,7 @@ public class Opciones implements Screen {
 
     /**
      * sobrecarga del contructor
+     *
      * @param mainClass clase pirncipal
      */
     public Opciones(final MainClass mainClass) {
@@ -94,17 +98,17 @@ public class Opciones implements Screen {
         float h = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w / 2, h / 2);
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
 
-        v = new ExtendViewport(w / 2, h / 2, camera);
+        v = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(v);
 
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("btnPeque", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
 
-        Image fondo = UICrea.createImage(new Vector2(0, 0), w / 2, h / 2, skin, "Fondo", stage);
-        btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(w / 3 + 250, h / 3 + 80), 100, 70, skin, "btnPlay", stage, 30);
+        Image fondo = UICrea.createImage(new Vector2(0, 0), WORLD_WIDTH, WORLD_HEIGHT, skin, "Fondo", stage);
+        btnAtras = UICrea.createTextButton(lang.get("setting.back"), 25, new Vector2(WORLD_WIDTH*0.9f, WORLD_HEIGHT*0.8f), 100, 70, skin, "btnPlay", stage, 30);
 
         btnAtras.addListener(new InputListener() {
 
@@ -145,7 +149,7 @@ public class Opciones implements Screen {
 
         });
 
-        btnMainMenu = UICrea.createTextButton(lang.get("setting.menu"), 25, new Vector2(w / 3 + 250, h / 3), 100, 70, skin, "btnPlay", stage, 35);
+        btnMainMenu = UICrea.createTextButton(lang.get("setting.menu"), 25, new Vector2(WORLD_WIDTH*0.9f, WORLD_HEIGHT*0.65f), 100, 70, skin, "btnPlay", stage, 35);
         btnMainMenu.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -158,7 +162,7 @@ public class Opciones implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
 
-                    mainClass.setScreen(new MainMenu(mainClass));
+                mainClass.setScreen(new MainMenu(mainClass));
             }
         });
 
@@ -212,6 +216,7 @@ public class Opciones implements Screen {
 
     /**
      * Metodo de renderizado
+     *
      * @param delta The time in seconds since the last render.
      */
     @Override
@@ -243,7 +248,8 @@ public class Opciones implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        v.update(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override

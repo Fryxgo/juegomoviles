@@ -7,6 +7,10 @@ import java.util.Vector;
 
 public class Constantes {
 
+    public static final float WORLD_HEIGHT = 480;
+    public static final float PPU = Gdx.graphics.getHeight() / WORLD_HEIGHT;
+    public static final float WORLD_WIDTH = Gdx.graphics.getWidth() / PPU;
+
     /**
      * Enumerado con la direccion en vector de la serpiente
      */

@@ -1,6 +1,8 @@
 package Juego.moviles.Jueuito.Screens;
 
 
+import static Juego.moviles.Jueuito.Constantes.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -103,7 +105,7 @@ public class MyGdxGame implements Screen {
      * para gestionar el movimiento
      */
     boolean crear = false, colision = true;
-    Mapa mapa;
+//    Mapa mapa;
     /**
      * texturas de la serpiente
      */
@@ -153,7 +155,7 @@ public class MyGdxGame implements Screen {
     /**
      * referencia al fondo de pantalla
      */
-    Image fondo;
+    Image fondo, mapa;
 
     /**
      * contructor de la Screen del juego crea e inicializa lo que se ve en pantalla
@@ -168,13 +170,11 @@ public class MyGdxGame implements Screen {
         imagenCabeza = new Texture(Gdx.files.internal("Serpiente/cabeza.png"));
         imagenCuerpo = new Texture(Gdx.files.internal("Serpiente/cuerpo.png"));
 
-        float x = Gdx.graphics.getWidth();
-        float y = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, x / 2, y / 2);
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
 
-        v = new ExtendViewport(x / 2, y / 2, camera);
+        v = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         stage = new Stage(v);
         world = new World(new Vector2(0, 0), false);
         b2dr = new Box2DDebugRenderer();
@@ -183,12 +183,13 @@ public class MyGdxGame implements Screen {
         skin.add("btnPause", new Texture(Gdx.files.internal("Buttons/BtnPeque.png")));
         skin.add("btnPlay", new Texture(Gdx.files.internal("Buttons/BtnGrande.png")));
         skin.add("Fondo", new Texture(Gdx.files.internal("Fondo/Fondo.png")));
-        fondo = UICrea.createImage(new Vector2(0,0), x /2,y/2,skin,"Fondo",stage);
+        skin.add("Mapa", new Texture(Gdx.files.internal("Fondo/mapa.png")));
 
-        btn = UICrea.createTextButton("Pause", 15, new Vector2(x / 2 - 150, y / 6 + 30), 75, 60, skin, "btnPause", stage, 20);
-        TiledMap tiledMap = new TmxMapLoader().load("Mapa.tmx");
-        tmr = new OrthogonalTiledMapRenderer(tiledMap);
-        mapa = new Mapa(world, tiledMap.getLayers().get("Colisiones").getObjects());
+        fondo = UICrea.createImage(new Vector2(0,0), WORLD_WIDTH, WORLD_HEIGHT,skin,"Fondo",stage);
+        mapa=UICrea.createImage(new Vector2(0,0), WORLD_WIDTH*0.8f, WORLD_HEIGHT,skin,"Mapa",stage);
+
+        btn = UICrea.createTextButton("Pause", 15, new Vector2(WORLD_WIDTH*0.85f,  WORLD_HEIGHT*0.4f), 75, 60, skin, "btnPause", stage, 20);
+
 
         player = new Serpiente(32, 32, 525, 225, world, false);
         cuerpos.add(player);
@@ -202,12 +203,12 @@ public class MyGdxGame implements Screen {
         time = System.currentTimeMillis();
 
 
-        UICrea.createLabel(lang.get("main.score"), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 + 100), stage);
-        labelPuntuacion = UICrea.createLabel("0", 30, Color.WHITE, new Vector2(x / 3 + 255, y / 3 + 70), stage);
-        labelTiempo = UICrea.createLabel("", 30, Color.WHITE, new Vector2(x / 3 + 230, y / 3 + 30), stage);
+        UICrea.createLabel(lang.get("main.score"), 25, Color.WHITE, new Vector2(WORLD_WIDTH*0.81f,  WORLD_HEIGHT*0.80f), stage);
+        labelPuntuacion = UICrea.createLabel("0", 25, Color.WHITE, new Vector2(WORLD_WIDTH*0.89f,  WORLD_HEIGHT*0.75f), stage);
+        labelTiempo = UICrea.createLabel("", 25, Color.WHITE, new Vector2(WORLD_WIDTH*0.85f,  WORLD_HEIGHT*0.73f), stage);
 
 
-        labelRecord = UICrea.createLabel(String.format("Record %d", record.getInteger("HighScore")), 30, Color.WHITE, new Vector2(x / 3 + 200, y / 3 - 30), stage);
+        labelRecord = UICrea.createLabel(String.format("Record %d", record.getInteger("HighScore")), 25, Color.WHITE, new Vector2(WORLD_WIDTH*0.81f,  WORLD_HEIGHT*0.61f), stage);
 
         /**
          * Listener del boton pause
@@ -235,7 +236,7 @@ public class MyGdxGame implements Screen {
         /**
          * Listener del boton opciones
          */
-        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(x / 3+220, y / 9),120,60,skin,"btnPlay", stage, 30);
+        btnOptions = UICrea.createTextButton(lang.get("mainmenu.settings"),20, new Vector2(WORLD_WIDTH*0.82f, WORLD_HEIGHT*0.2f),120,60,skin,"btnPlay", stage, 30);
         btnOptions.addListener(new InputListener(){
 
             @Override
@@ -269,7 +270,6 @@ public class MyGdxGame implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        tmr.render();
         labelPuntuacion.setText((cuerpos.size() - 3) * 10 + "");
         segundos = (System.currentTimeMillis() - time) / 1000;
         labelTiempo.setText(String.format("%02.0f : %02.0f", (float) (segundos / 60), (float) (segundos % 60)));
@@ -301,7 +301,8 @@ public class MyGdxGame implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, width / 2, height / 2);
+       v.update(width,height);
+       stage.getViewport().update(width,height);
 
     }
 
@@ -336,9 +337,6 @@ public class MyGdxGame implements Screen {
     public void update(float delta) {
         world.step(1 / 60f, 6, 2);
         cameraUpdate();
-
-        tmr.setView(camera);
-        tmr.render();
 
         if (!hit) {
 
@@ -524,11 +522,11 @@ public class MyGdxGame implements Screen {
     public void compruebaCabeza() {
         Serpiente cabeza = cuerpos.get(0);
 
-        if (cabeza.getPosicionX() > Gdx.graphics.getWidth() / 2 - 250) {
+        if (cabeza.getPosicionX() > (Gdx.graphics.getWidth() / 2)*0.78f) {
             cabeza.mover(30, cabeza.getPosicionY());
         } else {
             if (cabeza.getPosicionX() < 10) {
-                cabeza.mover(Gdx.graphics.getWidth() / 2 - 250, cabeza.getPosicionY());
+                cabeza.mover(  (Gdx.graphics.getWidth() / 2)*0.78f, cabeza.getPosicionY());
             }
         }
 
@@ -554,8 +552,8 @@ public class MyGdxGame implements Screen {
         float x;
         float y;
         do {
-            x = (float) (Math.random() * 870) + 35;
-            y = (float) (Math.random() * 480) + 35;
+            x = (float) (Math.random() * WORLD_WIDTH*0.78f) + 35;
+            y = (float) (Math.random() * WORLD_HEIGHT) + 35;
 
         } while (comprueba(x, y));
 
